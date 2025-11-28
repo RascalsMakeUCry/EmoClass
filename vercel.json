@@ -1,15 +1,7 @@
 {
   "crons": [
     {
-      "path": "/api/cron/daily-summary",
-      "schedule": "0 15 * * *"
-    },
-    {
-      "path": "/api/cron/weekly-summary",
-      "schedule": "0 8 * * 1"
-    },
-    {
-      "path": "/api/cron/check-missing-checkins",
+      "path": "/api/cron/run-all",
       "schedule": "0 12 * * *"
     }
   ]
