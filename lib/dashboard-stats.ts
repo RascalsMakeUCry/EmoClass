@@ -29,15 +29,15 @@ export function calculateDashboardStats(
   const checkedInPercentage = Math.min(100, (checkedInCount / totalStudents) * 100);
 
   // Categorize emotions
-  const positiveEmotions = ['happy', 'neutral'];
-  const tiredEmotions = ['sleepy'];
-  const negativeEmotions = ['stressed', 'normal']; // 'normal' can indicate issues
+  const positiveEmotions = ['happy'];
+  const normalEmotions = ['normal'];
+  const negativeEmotions = ['stressed'];
 
   const positiveCount = checkins.filter((c) =>
     positiveEmotions.includes(c.emotion)
   ).length;
-  const tiredCount = checkins.filter((c) =>
-    tiredEmotions.includes(c.emotion)
+  const normalCount = checkins.filter((c) =>
+    normalEmotions.includes(c.emotion)
   ).length;
   const negativeCount = checkins.filter((c) =>
     negativeEmotions.includes(c.emotion)
@@ -46,8 +46,8 @@ export function calculateDashboardStats(
   // Calculate percentages based on checked-in students
   const positivePercentage =
     checkedInCount > 0 ? (positiveCount / checkedInCount) * 100 : 0;
-  const tiredPercentage =
-    checkedInCount > 0 ? (tiredCount / checkedInCount) * 100 : 0;
+  const normalPercentage =
+    checkedInCount > 0 ? (normalCount / checkedInCount) * 100 : 0;
   const negativePercentage =
     checkedInCount > 0 ? (negativeCount / checkedInCount) * 100 : 0;
 
@@ -62,8 +62,8 @@ export function calculateDashboardStats(
       count: positiveCount,
     },
     tiredLowEnergy: {
-      percentage: Math.round(tiredPercentage),
-      count: tiredCount,
+      percentage: Math.round(normalPercentage),
+      count: normalCount,
     },
     needsSupport: {
       percentage: Math.round(negativePercentage),
@@ -97,10 +97,8 @@ export function calculateEmotionDistribution(
   // Count emotions
   const emotionCounts: Record<EmotionType, number> = {
     happy: 0,
-    neutral: 0,
     normal: 0,
     stressed: 0,
-    sleepy: 0,
   };
 
   filteredCheckins.forEach((checkin) => {
@@ -109,11 +107,9 @@ export function calculateEmotionDistribution(
 
   // Map emotions to colors
   const emotionColors: Record<EmotionType, string> = {
-    happy: '#10b981', // green
-    neutral: '#6ee7b7', // light green
-    normal: '#fbbf24', // yellow
-    stressed: '#ef4444', // red
-    sleepy: '#f59e0b', // orange
+    happy: '#C7EA83', // green
+    normal: '#EFBC60', // yellow/orange
+    stressed: '#ED8D8D', // red/pink
   };
 
   // Convert to distribution array
@@ -176,7 +172,7 @@ export function calculateWeeklyTrend(
     // For now, calculate overall score
     if (dayCheckins.length > 0) {
       const positiveCount = dayCheckins.filter((c) =>
-        ['happy', 'neutral'].includes(c.emotion)
+        c.emotion === 'happy'
       ).length;
       const score = Math.round((positiveCount / dayCheckins.length) * 100);
 
@@ -195,11 +191,9 @@ export function calculateWeeklyTrend(
  */
 export function getEmotionColor(emotion: EmotionType): string {
   const colors: Record<EmotionType, string> = {
-    happy: '#10b981',
-    neutral: '#6ee7b7',
-    normal: '#fbbf24',
-    stressed: '#ef4444',
-    sleepy: '#f59e0b',
+    happy: '#C7EA83',
+    normal: '#EFBC60',
+    stressed: '#ED8D8D',
   };
   return colors[emotion];
 }

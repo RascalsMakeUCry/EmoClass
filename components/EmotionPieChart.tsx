@@ -30,47 +30,31 @@ const emotionConfig: Record<EmotionType, {
   happy: {
     label: 'Senang',
     emoji: '😊',
-    color: 'rgba(34, 197, 94, 0.8)',
+    color: '#C7EA83',
     bgColor: 'bg-green-100',
     textColor: 'text-green-800',
     description: 'Perasaan positif dan bahagia'
   },
-  neutral: {
-    label: 'Netral',
-    emoji: '😐',
-    color: 'rgba(59, 130, 246, 0.8)',
-    bgColor: 'bg-blue-100',
-    textColor: 'text-blue-800',
-    description: 'Perasaan biasa saja'
-  },
   normal: {
-    label: 'Normal',
-    emoji: '🙂',
-    color: 'rgba(156, 163, 175, 0.8)',
-    bgColor: 'bg-gray-100',
-    textColor: 'text-gray-800',
+    label: 'Biasa Saja',
+    emoji: '😐',
+    color: '#EFBC60',
+    bgColor: 'bg-yellow-100',
+    textColor: 'text-yellow-800',
     description: 'Kondisi normal dan stabil'
   },
   stressed: {
     label: 'Sedih',
     emoji: '😔',
-    color: 'rgba(239, 68, 68, 0.8)',
+    color: '#ED8D8D',
     bgColor: 'bg-red-100',
     textColor: 'text-red-800',
     description: 'Butuh perhatian khusus'
   },
-  sleepy: {
-    label: 'Mengantuk',
-    emoji: '😴',
-    color: 'rgba(168, 85, 247, 0.8)',
-    bgColor: 'bg-purple-100',
-    textColor: 'text-purple-800',
-    description: 'Kurang energi atau lelah'
-  },
 };
 
 export default function EmotionPieChart({ emotionData }: EmotionPieChartProps) {
-  const emotions: EmotionType[] = ['happy', 'neutral', 'normal', 'stressed', 'sleepy'];
+  const emotions: EmotionType[] = ['happy', 'normal', 'stressed'];
   
   // Calculate total
   const totalStudents = emotions.reduce((sum, e) => sum + (emotionData[e] || 0), 0);

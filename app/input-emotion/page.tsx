@@ -18,7 +18,7 @@ export default function CheckInPage() {
   const [hasCheckedInToday, setHasCheckedInToday] = useState(false);
   const [todayCheckin, setTodayCheckin] = useState<any>(null);
 
-  const emotions: EmotionType[] = ['happy', 'neutral', 'normal', 'stressed', 'sleepy'];
+  const emotions: EmotionType[] = ['happy', 'normal', 'stressed'];
 
   // Load classes on mount
   useEffect(() => {
@@ -152,8 +152,8 @@ export default function CheckInPage() {
       // Success - refresh check-in status
       setSuccess('Check-in berhasil! Terima kasih sudah berbagi perasaan Anda hari ini 😊');
       
-      // Check for alert (3 consecutive negative emotions)
-      if (selectedEmotion === 'stressed' || selectedEmotion === 'sleepy') {
+      // Check for alert (3 consecutive stressed emotions)
+      if (selectedEmotion === 'stressed') {
         try {
           await fetch('/api/check-alert', {
             method: 'POST',
@@ -181,26 +181,32 @@ export default function CheckInPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 p-4">
+    <div 
+      className="min-h-screen p-4" 
+      style={{ 
+        fontFamily: 'var(--font-poppins)',
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+      }}
+    >
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 pt-8 animate-fadeIn">
-          <div className="inline-block mb-4">
-            <div className="text-6xl mb-2">📚</div>
-          </div>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-3">
-            EmoClass Check-in
+          <h1 className="text-4xl font-bold text-gray-900 mb-2" style={{ fontFamily: 'var(--font-poppins)' }}>
+            Halloo..
           </h1>
-          <p className="text-gray-700 font-medium">
+          <h2 className="text-3xl font-bold text-gray-900 mb-4" style={{ fontFamily: 'var(--font-poppins)' }}>
+            Bagaimana Harimu pagi ini ?
+          </h2>
+          <p className="text-gray-500 font-medium">
             {formatIndonesianDate(new Date())}
           </p>
-          <p className="text-sm text-gray-600 mt-3 max-w-md mx-auto">
+          <p className="text-sm text-gray-500 mt-3 max-w-md mx-auto">
             Bagaimana perasaan Anda hari ini? Ceritakan kepada kami untuk membantu guru memahami kondisi kelas dengan lebih baik.
           </p>
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-2xl p-8 space-y-6 animate-fadeIn border border-gray-100">
+        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-lg p-8 space-y-6 animate-fadeIn">
           {/* Class Selector */}
           <div>
             <label htmlFor="class" className="block text-sm font-medium text-gray-700 mb-2">
@@ -286,40 +292,40 @@ export default function CheckInPage() {
           {/* Emotion Buttons - Only show when student is selected and hasn't checked in */}
           {selectedStudentId && !hasCheckedInToday && (
             <div className="animate-fadeIn">
-              <label className="block text-base font-semibold text-gray-800 mb-4">
+              <label className="block text-base font-medium text-gray-600 mb-4" style={{ fontFamily: 'var(--font-poppins)' }}>
                 Bagaimana perasaan Anda? 💭
               </label>
-            <div className="grid grid-cols-5 gap-2 sm:gap-3">
-              {emotions.map((emotion, index) => (
-                <button
-                  key={emotion}
-                  type="button"
-                  onClick={() => setSelectedEmotion(emotion)}
-                  disabled={isSubmitting}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                  className={`
-                    flex flex-col items-center justify-center
-                    min-h-[90px] sm:min-h-[110px]
-                    p-3 sm:p-4
-                    rounded-2xl border-2 transition-all duration-200
-                    animate-fadeIn
-                    ${
-                      selectedEmotion === emotion
-                        ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 scale-105 shadow-lg'
-                        : 'border-gray-200 hover:border-blue-300 hover:bg-gradient-to-br hover:from-gray-50 hover:to-gray-100 hover:scale-105 hover:shadow-md'
-                    }
-                    disabled:opacity-50 disabled:cursor-not-allowed
-                    active:scale-95
-                  `}
-                >
-                  <span className="text-4xl sm:text-5xl mb-2 transform transition-transform hover:scale-110">
-                    {getEmotionEmoji(emotion)}
-                  </span>
-                  <span className="text-xs sm:text-sm font-semibold text-gray-700 text-center leading-tight">
-                    {getEmotionLabel(emotion)}
-                  </span>
-                </button>
-              ))}
+            <div className="grid grid-cols-3 gap-4">
+              {emotions.map((emotion, index) => {
+                return (
+                  <button
+                    key={emotion}
+                    type="button"
+                    onClick={() => setSelectedEmotion(selectedEmotion === emotion ? null : emotion)}
+                    disabled={isSubmitting}
+                    style={{ animationDelay: `${index * 0.1}s`, fontFamily: 'var(--font-poppins)' }}
+                    className={`
+                      flex flex-col items-center justify-center
+                      min-h-[120px] p-4 rounded-2xl border-2 transition-all duration-200
+                      animate-fadeIn
+                      ${
+                        selectedEmotion === emotion
+                          ? 'border-blue-400 bg-blue-50 shadow-lg scale-105'
+                          : 'border-gray-200 bg-white hover:border-gray-300 hover:shadow-md'
+                      }
+                      disabled:opacity-50 disabled:cursor-not-allowed
+                      active:scale-95
+                    `}
+                  >
+                    <span className="text-5xl mb-3 transform transition-transform">
+                      {getEmotionEmoji(emotion)}
+                    </span>
+                    <span className="text-base font-semibold text-gray-700 text-center">
+                      {getEmotionLabel(emotion)}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
             </div>
           )}
@@ -365,7 +371,8 @@ export default function CheckInPage() {
           <button
             type="submit"
             disabled={isSubmitting || !selectedEmotion}
-            className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-lg shadow-lg hover:shadow-xl active:scale-95 disabled:scale-100"
+            className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-lg shadow-md hover:shadow-lg active:scale-95 disabled:scale-100"
+            style={{ fontFamily: 'var(--font-poppins)' }}
           >
             {isSubmitting ? (
               <span className="flex items-center justify-center gap-2">
@@ -376,7 +383,7 @@ export default function CheckInPage() {
                 Mengirim...
               </span>
             ) : (
-              '✨ Kirim Check-in'
+              'Kirim Check-in'
             )}
           </button>
           )}

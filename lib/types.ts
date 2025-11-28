@@ -13,7 +13,7 @@ export interface Student {
   created_at: string;
 }
 
-export type EmotionType = 'happy' | 'neutral' | 'normal' | 'stressed' | 'sleepy';
+export type EmotionType = 'happy' | 'normal' | 'stressed';
 
 export interface EmotionCheckin {
   id: string;

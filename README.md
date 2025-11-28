@@ -170,6 +170,11 @@ Semua dokumentasi ada di folder `docs/`:
 - [`docs/TELEGRAM_SETUP.md`](docs/TELEGRAM_SETUP.md) - Setup lengkap Telegram bot
 - [`docs/ENHANCED_ALERT_SYSTEM.md`](docs/ENHANCED_ALERT_SYSTEM.md) - **NEW!** Multi-pattern alert system documentation
 
+### 🧪 Testing
+- [`scripts/QUICK_START.md`](scripts/QUICK_START.md) - **NEW!** Quick start testing alert
+- [`scripts/README.md`](scripts/README.md) - Dokumentasi lengkap testing scripts
+- [`docs/TESTING_ALERT_PATTERNS.md`](docs/TESTING_ALERT_PATTERNS.md) - Testing semua pola alert (manual)
+
 ### 🚢 Deployment
 - [`docs/DEPLOYMENT_WITH_AUTH.md`](docs/DEPLOYMENT_WITH_AUTH.md) - **NEW!** Deploy dengan authentication
 - [`docs/IMPLEMENTATION_COMPLETE.md`](docs/IMPLEMENTATION_COMPLETE.md) - Status implementasi

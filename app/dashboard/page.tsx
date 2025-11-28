@@ -16,10 +16,8 @@ export default function DashboardPage() {
   const [error, setError] = useState<string>('');
   const [emotionData, setEmotionData] = useState<Record<EmotionType, number>>({
     happy: 0,
-    neutral: 0,
     normal: 0,
     stressed: 0,
-    sleepy: 0,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -133,7 +131,7 @@ export default function DashboardPage() {
       setTotalStudents(studentIds.length);
 
       if (studentIds.length === 0) {
-        setEmotionData({ happy: 0, neutral: 0, normal: 0, stressed: 0, sleepy: 0 });
+        setEmotionData({ happy: 0, normal: 0, stressed: 0 });
         setCheckedInCount(0);
         return;
       }
@@ -155,10 +153,8 @@ export default function DashboardPage() {
       // Count emotions
       const counts: Record<EmotionType, number> = {
         happy: 0,
-        neutral: 0,
         normal: 0,
         stressed: 0,
-        sleepy: 0,
       };
 
       checkins?.forEach(checkin => {
@@ -170,12 +166,12 @@ export default function DashboardPage() {
 
       setEmotionData(counts);
 
-      // Get students needing attention (stressed or sleepy)
+      // Get students needing attention (stressed)
       const { data: attentionCheckins, error: attentionError } = await supabase
         .from('emotion_checkins')
         .select('id, student_id, emotion, note, created_at, students(name)')
         .in('student_id', studentIds)
-        .in('emotion', ['stressed', 'sleepy'])
+        .eq('emotion', 'stressed')
         .gte('created_at', startOfDay.toISOString())
         .lte('created_at', endOfDay.toISOString())
         .order('created_at', { ascending: false });
@@ -211,28 +207,43 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4 lg:p-8">
+    <div 
+      className="min-h-screen p-4 lg:p-8"
+      style={{ 
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+      }}
+    >
       <div className="max-w-7xl mx-auto relative">
         {/* Dashboard Header */}
         <div className="relative z-30">
-          <DashboardHeader lastUpdated={new Date()} />
+          <DashboardHeader />
         </div>
 
         {/* Class Selector and Controls */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-3">
+            <div className="flex items-center gap-4">
               {/* Realtime Status Indicator */}
-              <div className={`w-3 h-3 rounded-full ${
-                realtimeStatus === 'connected' ? 'bg-green-500' :
-                realtimeStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
-                'bg-red-500'
-              }`} />
-              <span className="text-sm font-medium text-gray-700">
-                {realtimeStatus === 'connected' ? 'Live Update Aktif' :
-                 realtimeStatus === 'connecting' ? 'Menghubungkan...' :
-                 'Live Update Nonaktif'}
-              </span>
+              <div className="flex items-center gap-2">
+                <div className={`w-3 h-3 rounded-full ${
+                  realtimeStatus === 'connected' ? 'bg-green-500' :
+                  realtimeStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
+                  'bg-red-500'
+                }`} />
+                <span className="text-sm font-medium text-gray-700">
+                  {realtimeStatus === 'connected' ? 'Live Update Aktif' :
+                   realtimeStatus === 'connecting' ? 'Menghubungkan...' :
+                   'Live Update Nonaktif'}
+                </span>
+              </div>
+              
+              {/* Last Updated */}
+              <div className="flex items-center gap-2">
+                <span className="text-gray-400">•</span>
+                <span className="text-xs text-gray-500">
+                  Update terakhir: {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+                </span>
+              </div>
             </div>
 
             {/* Class Selector */}
@@ -275,38 +286,41 @@ export default function DashboardPage() {
               <>
                 <div className="animate-fadeInScale" style={{ animationDelay: '0ms' }}>
                   <StatsCard
-                    title="Students Checked In"
-                    value={`${dashboardStats.studentsCheckedIn.count}/${dashboardStats.studentsCheckedIn.total}`}
-                    subtitle={`${dashboardStats.studentsCheckedIn.percentage}% participation today`}
+                    title={`${dashboardStats.studentsCheckedIn.count}/${dashboardStats.studentsCheckedIn.total}`}
+                    subtitle="Students Checked In"
+                    value={`${dashboardStats.studentsCheckedIn.percentage}% participation today`}
                     icon="✓"
-                    color="green"
+                    color="blue"
                   />
                 </div>
                 <div className="animate-fadeInScale" style={{ animationDelay: '50ms' }}>
                   <StatsCard
-                    title="Positive Emotions"
-                    value={`${dashboardStats.positiveEmotions.percentage}%`}
-                    subtitle={`${dashboardStats.positiveEmotions.count} students feeling happy`}
+                    title="Positive"
+                    subtitle="Energy"
+                    value={`${dashboardStats.positiveEmotions.count} students feeling happy`}
                     icon="😊"
                     color="green"
+                    percentage={`${dashboardStats.positiveEmotions.percentage}%`}
                   />
                 </div>
                 <div className="animate-fadeInScale" style={{ animationDelay: '100ms' }}>
                   <StatsCard
-                    title="Tired / Low Energy"
-                    value={`${dashboardStats.tiredLowEnergy.percentage}%`}
-                    subtitle={`${dashboardStats.tiredLowEnergy.count} students need energy boost`}
+                    title="Normal"
+                    subtitle="Energy"
+                    value={`${emotionData.normal} students need energy boost`}
                     icon="😴"
                     color="yellow"
+                    percentage={`${totalStudents > 0 ? Math.round((emotionData.normal / totalStudents) * 100) : 0}%`}
                   />
                 </div>
                 <div className="animate-fadeInScale" style={{ animationDelay: '150ms' }}>
                   <StatsCard
-                    title="Needs Support"
-                    value={`${dashboardStats.needsSupport.percentage}%`}
-                    subtitle={`${dashboardStats.needsSupport.count} students anxious or sad`}
+                    title="Needs"
+                    subtitle="Support"
+                    value={`${dashboardStats.needsSupport.count} students anxious or sad`}
                     icon="⚠️"
                     color="red"
+                    percentage={`${dashboardStats.needsSupport.percentage}%`}
                   />
                 </div>
               </>
@@ -322,14 +336,9 @@ export default function DashboardPage() {
               <PieChartSkeleton />
             ) : (
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '200ms' }}>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-lg flex items-center justify-center">
-                    <span className="text-sm">📊</span>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Distribusi Emosi Kelas
-                  </h2>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Distribusi Emosi Kelas
+                </h2>
                 <EmotionPieChart emotionData={emotionData} />
               </div>
             )}
@@ -339,14 +348,9 @@ export default function DashboardPage() {
               <ProgressCircleSkeleton />
             ) : (
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '250ms' }}>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg flex items-center justify-center">
-                    <span className="text-sm">📈</span>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Progress Check-in
-                  </h2>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Progress Check-in
+                </h2>
                 <div className="flex flex-col items-center justify-center h-64">
                   {/* Progress Circle */}
                   <div className="relative w-40 h-40 mb-6">
@@ -405,14 +409,9 @@ export default function DashboardPage() {
               <AttentionListSkeleton />
             ) : (
               <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 lg:col-span-2 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '300ms' }}>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="w-8 h-8 bg-gradient-to-r from-red-400 to-orange-500 rounded-lg flex items-center justify-center">
-                    <span className="text-sm">⚠️</span>
-                  </div>
-                  <h2 className="text-2xl font-bold text-gray-800">
-                    Siswa yang Perlu Perhatian
-                  </h2>
-                </div>
+                <h2 className="text-2xl font-bold text-gray-800 mb-6">
+                  Siswa yang Perlu Perhatian
+                </h2>
 
                 {/* Telegram Notification Info */}
                 {studentsNeedingAttention.length > 0 && (
@@ -447,7 +446,7 @@ export default function DashboardPage() {
                     >
                       {/* Emotion Icon */}
                       <div className="text-3xl flex-shrink-0">
-                        {student.emotion === 'stressed' ? '😔' : '😴'}
+                        😔
                       </div>
 
                       {/* Student Info */}
@@ -456,7 +455,7 @@ export default function DashboardPage() {
                           {student.studentName}
                         </h3>
                         <p className="text-sm text-gray-600 mb-1">
-                          {student.emotion === 'stressed' ? 'Sedih' : 'Mengantuk'}
+                          Sedih/Tertekan
                         </p>
                         {student.note && (
                           <p className="text-sm text-gray-700 italic">

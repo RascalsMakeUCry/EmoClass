@@ -58,10 +58,8 @@ export function formatIndonesianNumber(num: number): string {
 export function getEmotionLabel(emotion: string): string {
   const labels: Record<string, string> = {
     happy: 'Senang',
-    neutral: 'Baik',
     normal: 'Biasa Saja',
     stressed: 'Sedih',
-    sleepy: 'Mengantuk',
   };
 
   return labels[emotion] || emotion;
@@ -73,10 +71,8 @@ export function getEmotionLabel(emotion: string): string {
 export function getEmotionEmoji(emotion: string): string {
   const emojis: Record<string, string> = {
     happy: '😊',
-    neutral: '👍',
     normal: '😐',
     stressed: '😔',
-    sleepy: '😴',
   };
 
   return emojis[emotion] || '😐';
@@ -86,7 +82,7 @@ export function getEmotionEmoji(emotion: string): string {
  * Check if emotion is negative (needs attention)
  */
 export function isNegativeEmotion(emotion: string): boolean {
-  return emotion === 'stressed' || emotion === 'sleepy';
+  return emotion === 'stressed';
 }
 
 /**

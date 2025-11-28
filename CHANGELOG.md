@@ -2,6 +2,115 @@
 
 All notable changes to EmoClass project.
 
+## [2.3.0] - 2025-11-28
+
+### 📊 Bulk Import Students from Excel
+
+#### Added
+- **Excel Import Feature** 📁
+  - Upload Excel file (.xlsx atau .xls) untuk bulk import siswa
+  - Download template Excel dengan format yang benar
+  - Validasi format dan data otomatis
+  - Error handling dengan detail per baris
+  - Progress indicator saat upload
+  - Support multiple column names (Nama Siswa, nama, Name, etc.)
+  - Bulk insert ke database (efficient)
+  - Auto-refresh setelah import berhasil
+
+#### Features
+- ✅ Import banyak siswa sekaligus (10-500+ siswa)
+- ✅ Template Excel yang bisa didownload
+- ✅ Validasi real-time
+- ✅ Error messages yang jelas
+- ✅ Toast notifications untuk feedback
+- ✅ Modern UI dengan gradient background
+
+#### API
+- Created `/api/admin/students/bulk-import` - POST endpoint
+- Uses `xlsx` library untuk parsing Excel
+- Bulk insert dengan single query
+
+#### Dependencies
+- Added `xlsx@^0.18.5` untuk Excel parsing
+
+### 🎨 Toast Notifications
+
+#### Added
+- **Floating Toast Notifications** 🎉
+  - Created reusable Toast component
+  - Smooth slide-in animation from right
+  - Auto-dismiss after 3 seconds
+  - Manual close button
+  - Support for success, error, warning, info types
+  - Clean, modern design with icons
+  - Portal rendering (fixed position)
+
+#### Updated
+- Replaced static alert boxes with floating toasts in:
+  - `ClassesManagement` - All CRUD operations
+  - `TeachersManagement` - All CRUD operations
+- Better UX dengan notifikasi yang tidak mengganggu layout
+
+## [2.3.0] - 2025-11-28
+
+### 🏫 Classes & Students Management (Fixed)
+
+#### Fixed
+- **API Endpoints untuk Classes & Students** 🔧
+  - Created `/api/admin/classes` - GET, POST
+  - Created `/api/admin/classes/[id]` - PUT, DELETE
+  - Created `/api/admin/students` - GET, POST
+  - Created `/api/admin/students/[id]` - PUT, DELETE
+  - Fixed Next.js 15 dynamic route params (await params)
+  - Proper authentication & authorization checks
+  - Input validation & error handling
+
+#### Features Now Working
+- ✅ Tambah kelas baru
+- ✅ Edit nama kelas
+- ✅ Hapus kelas (dengan warning jika ada siswa)
+- ✅ Tambah siswa ke kelas
+- ✅ Edit nama siswa
+- ✅ Hapus siswa
+- ✅ Auto-refresh student count
+- ✅ Duplicate name validation
+
+### 🔐 Account Status Real-time Notification
+
+#### Added
+- **Real-time Account Deactivation Notification** 🚨
+  - Supabase Realtime listener untuk monitoring status akun
+  - Modal notifikasi otomatis saat akun dinonaktifkan/dihapus
+  - Countdown 5 detik sebelum redirect ke login
+  - Tombol "OK, Mengerti" untuk skip countdown
+  - Icon warning dengan pulse animation
+  - Modal tidak bisa ditutup (forced logout)
+  - Support multiple sessions (semua session ter-logout)
+  - Clean production code (no debug logs, no test buttons)
+
+- **Confirmation Modal untuk Toggle Status Guru** ⚠️
+  - Modal konfirmasi saat nonaktifkan/aktifkan akun guru
+  - Warning message jika guru sedang login
+  - Informasi bahwa guru akan auto-logout dalam 5 detik
+  - Prevent accidental deactivation
+  - Success notification setelah toggle
+
+#### Documentation
+- `docs/ACCOUNT_STATUS_NOTIFICATION.md` - Feature documentation
+- `docs/TESTING_ACCOUNT_DEACTIVATION.md` - Testing guide
+- `docs/FIX_REALTIME_USERS.md` - Realtime setup guide
+- `scripts/test-account-deactivation.ts` - Testing script
+- `scripts/debug-realtime.ts` - Debug Realtime connection
+- `supabase/enable-users-realtime.sql` - SQL script
+
+#### Benefits
+- ✅ User tidak bingung kenapa di-logout
+- ✅ Transparansi dan komunikasi yang jelas
+- ✅ Professional UX
+- ✅ Menghargai user dengan informasi
+- ✅ Prevent accidental deactivation dengan confirmation modal
+- ✅ Clean code tanpa debugging artifacts
+
 ## [2.2.0] - 2025-11-27
 
 ### 🎯 Major Update: Admin Dashboard & Logout Feature

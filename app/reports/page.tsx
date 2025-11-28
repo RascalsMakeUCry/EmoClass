@@ -21,10 +21,8 @@ export default function ReportsPage() {
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
   const [totalEmotions, setTotalEmotions] = useState<Record<EmotionType, number>>({
     happy: 0,
-    neutral: 0,
     normal: 0,
     stressed: 0,
-    sleepy: 0,
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -102,10 +100,8 @@ export default function ReportsPage() {
       const dataByDate: Record<string, Record<EmotionType, number>> = {};
       const totals: Record<EmotionType, number> = {
         happy: 0,
-        neutral: 0,
         normal: 0,
         stressed: 0,
-        sleepy: 0,
       };
 
       checkins?.forEach(checkin => {
@@ -115,10 +111,8 @@ export default function ReportsPage() {
         if (!dataByDate[date]) {
           dataByDate[date] = {
             happy: 0,
-            neutral: 0,
             normal: 0,
             stressed: 0,
-            sleepy: 0,
           };
         }
 
@@ -148,17 +142,19 @@ export default function ReportsPage() {
   const avgPerDay = dailyData.length > 0 ? (totalCheckins / dailyData.length).toFixed(1) : '0';
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 p-4 lg:p-8">
+    <div 
+      className="min-h-screen p-4 lg:p-8"
+      style={{ 
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+      }}
+    >
       <div className="max-w-7xl mx-auto">
-        <DashboardHeader lastUpdated={new Date()} />
+        <DashboardHeader />
 
         {/* Filters */}
         <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
           <div className="flex flex-col gap-4">
-            <div className="flex items-center gap-3 mb-2">
-              <span className="text-2xl">📈</span>
-              <h2 className="text-xl font-bold text-gray-800">Laporan Historis</h2>
-            </div>
+            <h2 className="text-xl font-bold text-gray-800 mb-2">Laporan Historis</h2>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Class Selector */}
@@ -217,26 +213,17 @@ export default function ReportsPage() {
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">📊</span>
-                  <span className="text-sm text-gray-600">Total Check-ins</span>
-                </div>
+                <span className="text-sm text-gray-600 mb-2 block">Total Check-ins</span>
                 <div className="text-3xl font-bold text-gray-900">{totalCheckins}</div>
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">📅</span>
-                  <span className="text-sm text-gray-600">Jumlah Hari</span>
-                </div>
+                <span className="text-sm text-gray-600 mb-2 block">Jumlah Hari</span>
                 <div className="text-3xl font-bold text-gray-900">{dailyData.length}</div>
               </div>
 
               <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-2">
-                  <span className="text-2xl">📈</span>
-                  <span className="text-sm text-gray-600">Rata-rata per Hari</span>
-                </div>
+                <span className="text-sm text-gray-600 mb-2 block">Rata-rata per Hari</span>
                 <div className="text-3xl font-bold text-gray-900">{avgPerDay}</div>
               </div>
             </div>
@@ -266,15 +253,13 @@ export default function ReportsPage() {
                         <div className="text-sm text-gray-500">Total: {day.total} check-ins</div>
                       </div>
                     </div>
-                    <div className="grid grid-cols-5 gap-2">
+                    <div className="grid grid-cols-3 gap-2">
                       {Object.entries(day.emotions).map(([emotion, count]) => (
                         <div key={emotion} className="text-center p-2 bg-gray-50 rounded-lg">
                           <div className="text-2xl mb-1">
                             {emotion === 'happy' && '😊'}
-                            {emotion === 'neutral' && '😐'}
-                            {emotion === 'normal' && '🙂'}
+                            {emotion === 'normal' && '😐'}
                             {emotion === 'stressed' && '😔'}
-                            {emotion === 'sleepy' && '😴'}
                           </div>
                           <div className="text-lg font-bold text-gray-900">{count}</div>
                           <div className="text-xs text-gray-500">
