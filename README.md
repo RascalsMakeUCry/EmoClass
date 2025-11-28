@@ -17,7 +17,7 @@
 
 ### 2. 📱 Student Check-in (Siswa)
 - **Premium UI** dengan glass morphism dan gradient design
-- **5 emoji interaktif** dengan hover effects dan animations
+- **3 emoji interaktif** (😊 Happy, 😴 Normal, 😔 Stressed) dengan hover effects dan animations
 - **Mobile-first** - Touch-friendly buttons (90px+ height)
 - **Smooth animations** - Fade-in, slide-up, scale effects
 - **Catatan opsional** (max 100 karakter)
@@ -139,7 +139,7 @@ npm test -- emotion-validation.test.ts
 - **23 unit tests** - Core functionality
 - **45 property-based tests** - 100 iterations each with fast-check
 - **Test categories**:
-  - ✅ Emotion validation (5 emotions)
+  - ✅ Emotion validation (3 emotions: happy, normal, stressed)
   - ✅ Note validation (max 100 chars)
   - ✅ Check-in persistence
   - ✅ Negative emotion filtering
@@ -357,7 +357,7 @@ EmoClass adalah platform web modern yang memungkinkan:
 **For Students:**
 - ⏱️ **10 seconds** - Waktu check-in per siswa
 - 📱 **Mobile-first** - 80% siswa pakai HP
-- 😊 **Easy to use** - 5 emoji, no complexity
+- 😊 **Easy to use** - 3 emoji sederhana (Happy, Normal, Stressed), no complexity
 
 **For Teachers:**
 - 📊 **Real-time** - Dashboard update instant
@@ -397,7 +397,7 @@ EmoClass adalah platform web modern yang memungkinkan:
 
 1. **Problem** (30s) - Guru tidak tahu kondisi emosi siswa
 2. **Solution** (1m) - Tunjukkan EmoClass interface
-3. **Student Check-in** (1m) - Demo check-in dengan emoji
+3. **Student Check-in** (1m) - Demo check-in dengan 3 emoji (Happy, Normal, Stressed)
 4. **Teacher Dashboard** (1.5m) - Real-time updates, pie chart
 5. **Alert System** (1m) - Tunjukkan Telegram notification
 6. **Impact** (30s) - Metrics dan competitive advantages
