@@ -153,7 +153,7 @@ export default function ReportsPage() {
         <DashboardHeader />
 
         {/* Filters */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
+        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
           <div className="flex flex-col gap-4">
             <h2 className="text-xl font-bold text-gray-800 mb-2">Laporan Historis</h2>
 
@@ -213,34 +213,34 @@ export default function ReportsPage() {
           <>
             {/* Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
-                <span className="text-sm text-gray-600 mb-2 block">Total Check-ins</span>
+              <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
+                <span className="text-sm text-gray-600 mb-2 block">Total Check-in</span>
                 <div className="text-3xl font-bold text-gray-900">{totalCheckins}</div>
               </div>
 
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+              <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
                 <span className="text-sm text-gray-600 mb-2 block">Jumlah Hari</span>
                 <div className="text-3xl font-bold text-gray-900">{dailyData.length}</div>
               </div>
 
-              <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+              <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
                 <span className="text-sm text-gray-600 mb-2 block">Rata-rata per Hari</span>
                 <div className="text-3xl font-bold text-gray-900">{avgPerDay}</div>
               </div>
             </div>
 
             {/* Overall Distribution */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 mb-8">
+            <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 mb-8">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Distribusi Emosi Keseluruhan</h3>
               <EmotionPieChart emotionData={totalEmotions} />
             </div>
 
             {/* Daily Breakdown */}
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8">
+            <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8">
               <h3 className="text-xl font-bold text-gray-800 mb-6">Data Per Hari</h3>
               <div className="space-y-4">
                 {dailyData.map((day) => (
-                  <div key={day.date} className="border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
+                  <div key={day.date} className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-md transition-shadow">
                     <div className="flex items-center justify-between mb-3">
                       <div>
                         <div className="font-semibold text-gray-900">
@@ -251,7 +251,7 @@ export default function ReportsPage() {
                             day: 'numeric',
                           })}
                         </div>
-                        <div className="text-sm text-gray-500">Total: {day.total} check-ins</div>
+                        <div className="text-sm text-gray-500">Total: {day.total} check-in</div>
                       </div>
                     </div>
                     <div className="grid grid-cols-3 gap-2">
@@ -277,7 +277,7 @@ export default function ReportsPage() {
         )}
 
         {selectedClassId && !loading && dailyData.length === 0 && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+          <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
             <span className="text-6xl mb-4 block">📭</span>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Tidak Ada Data</h3>
             <p className="text-gray-600">
@@ -287,14 +287,14 @@ export default function ReportsPage() {
         )}
 
         {loading && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+          <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
             <div className="w-12 h-12 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-gray-600">Memuat data...</p>
           </div>
         )}
 
         {!selectedClassId && (
-          <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+          <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
             <span className="text-6xl mb-4 block">📊</span>
             <h3 className="text-xl font-bold text-gray-800 mb-2">Pilih Kelas</h3>
             <p className="text-gray-600">

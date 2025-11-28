@@ -24,7 +24,7 @@ export default function NotificationsPage() {
         </div>
 
         {/* Coming Soon Card */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-12 text-center">
+        <div className="bg-white/40 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 p-12 text-center">
           <div className="mb-6">
             <span className="text-6xl">🚧</span>
           </div>

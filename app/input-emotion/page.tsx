@@ -207,7 +207,7 @@ export default function CheckInPage() {
         </div>
 
         {/* Form */}
-        <form onSubmit={handleSubmit} className="bg-white rounded-3xl shadow-lg p-8 space-y-6 animate-fadeIn">
+        <form onSubmit={handleSubmit} className="bg-white/40 rounded-3xl shadow-lg p-8 space-y-6 animate-fadeIn">
           {/* Class Selector */}
           <div>
             <label htmlFor="class" className="block text-sm font-medium text-gray-700 mb-2">
@@ -294,7 +294,7 @@ export default function CheckInPage() {
           {selectedStudentId && !hasCheckedInToday && (
             <div className="animate-fadeIn">
               <label className="block text-base font-medium text-gray-600 mb-4" style={{ fontFamily: 'var(--font-poppins)' }}>
-                Bagaimana perasaan Anda? 💭
+                Bagaimana perasaan kamu hari ini?
               </label>
             <div className="grid grid-cols-3 gap-4">
               {emotions.map((emotion, index) => {
@@ -345,7 +345,7 @@ export default function CheckInPage() {
               maxLength={100}
               rows={3}
               disabled={isSubmitting}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base resize-none"
+              className="w-full px-4 py-3 bg-white text-gray-800 border border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-base resize-none"
             />
             <p className="text-xs text-gray-500 mt-1 text-right">
               {note.length}/100 karakter
@@ -372,7 +372,7 @@ export default function CheckInPage() {
           <button
             type="submit"
             disabled={isSubmitting || !selectedEmotion}
-            className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed text-lg shadow-md hover:shadow-lg active:scale-95 disabled:scale-100"
+            className="w-full bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-4 px-6 rounded-xl transition-all disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed text-lg shadow-md hover:shadow-lg active:scale-95 disabled:scale-100"
             style={{ fontFamily: 'var(--font-poppins)' }}
           >
             {isSubmitting ? (
