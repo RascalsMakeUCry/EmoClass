@@ -30,6 +30,28 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
+// Helper function untuk format waktu WIB
+const formatWIBTime = (dateString: string) => {
+  return new Date(dateString).toLocaleTimeString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+};
+
+const formatWIBDateTime = (dateString: string) => {
+  return new Date(dateString).toLocaleString("id-ID", {
+    timeZone: "Asia/Jakarta",
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+};
+
 // ---- Classification ----
 function classifyTemperature(t: number) {
   if (t < 20) return "❄️ Dingin";
@@ -100,10 +122,10 @@ export default function IoTPage() {
       console.log("🔢 First row:", data[0]);
       console.log("🌡️ Temperature:", data[0].temperature);
       console.log("💧 Humidity:", data[0].humidity);
-      console.log("� tCreated at:", data[0].created_at);
+      console.log("🕒 Created at (WIB):", formatWIBDateTime(data[0].created_at));
       setRows(data);
       setDebugInfo(
-        `Loaded ${data.length} rows. Latest temp: ${data[0].temperature}°C`
+        `Loaded ${data.length} rows. Latest temp: ${data[0].temperature}°C at ${formatWIBTime(data[0].created_at)} WIB`
       );
     } else {
       console.warn("⚠️ No data found in database");
@@ -123,13 +145,15 @@ export default function IoTPage() {
         { event: "INSERT", schema: "public", table: "iot_sensor_data" },
         (payload) => {
           console.log("🔔 Realtime update:", payload.new);
+          const currentTimeWIB = new Date().toLocaleTimeString("id-ID", {
+            timeZone: "Asia/Jakarta",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+          });
           setRows((prev) => [payload.new, ...prev].slice(0, 200));
           setDebugInfo(
-            `New data: ${
-              payload.new.temperature
-            }°C at ${new Date().toLocaleTimeString("id-ID", {
-              timeZone: "Asia/Jakarta",
-            })}`
+            `New data: ${payload.new.temperature}°C at ${currentTimeWIB} WIB`
           );
         }
       )
@@ -154,15 +178,15 @@ export default function IoTPage() {
     .slice()
     .reverse()
     .map((row) => {
-      // Handle jika created_at undefined, format ke WIB
+      // Format waktu ke WIB untuk graph
       const timestamp = row.created_at
-        ? new Date(row.created_at).toLocaleTimeString("id-ID", {
+        ? formatWIBTime(row.created_at)
+        : new Date().toLocaleTimeString("id-ID", { 
             timeZone: "Asia/Jakarta",
             hour: "2-digit",
             minute: "2-digit",
             second: "2-digit",
-          })
-        : new Date().toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta" });
+          });
 
       return {
         time: timestamp,
@@ -180,7 +204,7 @@ export default function IoTPage() {
 
       {/* Debug Info */}
       <Card className="p-4 bg-blue-50 border-blue-200">
-        <p className="font-semibold text-blue-900">🐛 Debug Info:</p>
+        <p className="font-semibold text-blue-900">🐛 Debug Info (WIB - UTC+7):</p>
         <p className="text-sm text-blue-700">{debugInfo}</p>
         <p className="text-xs text-blue-600 mt-2">
           Total rows in state: {rows.length} | Filtered rows: {filtered.length}{" "}
@@ -254,7 +278,7 @@ export default function IoTPage() {
 
       {/* Charts */}
       <Card className="p-4">
-        <CardTitle>📊 Sensor Charts</CardTitle>
+        <CardTitle>📊 Sensor Charts (WIB)</CardTitle>
         <div className="h-80 mt-4">
           <ResponsiveContainer width="100%" height="100%">
             <LineChart data={graphData}>
@@ -285,12 +309,12 @@ export default function IoTPage() {
 
       {/* Raw Data Table (for debugging) */}
       <Card className="p-4">
-        <CardTitle className="mb-4">🔍 Raw Data (Last 5 rows)</CardTitle>
+        <CardTitle className="mb-4">🔍 Raw Data - Last 5 Rows (WIB)</CardTitle>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
               <tr className="border-b">
-                <th className="px-4 py-2 text-left">Time</th>
+                <th className="px-4 py-2 text-left">Time (WIB)</th>
                 <th className="px-4 py-2 text-left">Temp</th>
                 <th className="px-4 py-2 text-left">Humidity</th>
                 <th className="px-4 py-2 text-left">Gas</th>
@@ -302,17 +326,7 @@ export default function IoTPage() {
               {filtered.slice(0, 5).map((row, idx) => (
                 <tr key={idx} className="border-b">
                   <td className="px-4 py-2">
-                    {row.created_at
-                      ? new Date(row.created_at).toLocaleString("id-ID", {
-                          timeZone: "Asia/Jakarta",
-                          day: "2-digit",
-                          month: "2-digit",
-                          year: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          second: "2-digit",
-                        })
-                      : "-"}
+                    {row.created_at ? formatWIBDateTime(row.created_at) : "-"}
                   </td>
                   <td className="px-4 py-2">{row.temperature}°C</td>
                   <td className="px-4 py-2">{row.humidity}%</td>
