@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { UserPlus, Eye, EyeOff, Mail, Lock, User, Check, X, Trash2, Edit2 } from 'lucide-react';
 import Toast from '@/components/Toast';
+import LoadingSpinner from '@/components/LoadingSpinner';
 
 interface Teacher {
   id: string;
@@ -34,13 +35,15 @@ export default function TeachersManagement() {
     name: '',
     currentStatus: false,
   });
-  const [isClosing, setIsClosing] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
     password: '',
     full_name: '',
   });
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isTogglingStatus, setIsTogglingStatus] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchTeachers();
@@ -61,6 +64,7 @@ export default function TeachersManagement() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       if (editingId) {
@@ -110,6 +114,8 @@ export default function TeachersManagement() {
       fetchTeachers();
     } catch (err) {
       setToast({ message: 'Terjadi kesalahan', type: 'error' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -130,6 +136,8 @@ export default function TeachersManagement() {
   };
 
   const handleToggleActive = async () => {
+    setIsTogglingStatus(true);
+    
     try {
       const res = await fetch(`/api/admin/teachers/${toggleConfirm.id}`, {
         method: 'PUT',
@@ -151,10 +159,14 @@ export default function TeachersManagement() {
     } catch (err) {
       setToast({ message: 'Gagal mengupdate status guru', type: 'error' });
       setToggleConfirm({ show: false, id: '', name: '', currentStatus: false });
+    } finally {
+      setIsTogglingStatus(false);
     }
   };
 
   const handleDelete = async () => {
+    setIsDeleting(true);
+    
     try {
       const res = await fetch(`/api/admin/teachers/${deleteConfirm.id}`, {
         method: 'DELETE',
@@ -167,15 +179,13 @@ export default function TeachersManagement() {
     } catch (err) {
       setToast({ message: 'Gagal menghapus akun guru', type: 'error' });
       setDeleteConfirm({ show: false, id: '', name: '' });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
   const handleCloseModal = () => {
-    setIsClosing(true);
-    setTimeout(() => {
-      setShowForm(false);
-      setIsClosing(false);
-    }, 200);
+    setShowForm(false);
   };
 
   if (loading) {
@@ -333,11 +343,11 @@ export default function TeachersManagement() {
       {/* Form Modal */}
       {showForm && (
         <div 
-          className={`fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm ${isClosing ? 'animate-fadeOut' : 'animate-fadeInFast'}`}
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fadeInFast"
           onClick={handleCloseModal}
         >
           <div 
-            className={`bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative ${isClosing ? 'animate-scaleOut' : 'animate-scaleInFast'} max-h-[90vh] overflow-y-auto`}
+            className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-8 relative animate-scaleInFast max-h-[90vh] overflow-y-auto"
             onClick={(e) => e.stopPropagation()}
           >
             <button
@@ -417,14 +427,17 @@ export default function TeachersManagement() {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium"
+                  disabled={isSubmitting}
+                  className="flex-1 px-6 py-3 bg-green-600 text-white rounded-xl hover:bg-green-700 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {editingId ? 'Update Data' : 'Buat Akun Guru'}
+                  {isSubmitting && <LoadingSpinner size="sm" />}
+                  <span>{editingId ? 'Update Data' : 'Buat Akun Guru'}</span>
                 </button>
                 <button
                   type="button"
                   onClick={handleCancelEdit}
-                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors font-medium"
+                  disabled={isSubmitting}
+                  className="px-6 py-3 bg-gray-200 text-gray-700 rounded-xl hover:bg-gray-300 transition-colors font-medium disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   Batal
                 </button>
@@ -470,9 +483,11 @@ export default function TeachersManagement() {
               </button>
               <button
                 onClick={handleDelete}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl"
+                disabled={isDeleting}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Ya, Hapus
+                {isDeleting && <LoadingSpinner size="sm" />}
+                <span>Ya, Hapus</span>
               </button>
             </div>
           </div>
@@ -547,13 +562,15 @@ export default function TeachersManagement() {
               </button>
               <button
                 onClick={handleToggleActive}
-                className={`flex-1 px-6 py-3 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl ${
+                disabled={isTogglingStatus}
+                className={`flex-1 px-6 py-3 text-white font-semibold rounded-xl transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${
                   toggleConfirm.currentStatus
                     ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700'
                     : 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700'
                 }`}
               >
-                {toggleConfirm.currentStatus ? 'Ya, Nonaktifkan' : 'Ya, Aktifkan'}
+                {isTogglingStatus && <LoadingSpinner size="sm" />}
+                <span>{toggleConfirm.currentStatus ? 'Ya, Nonaktifkan' : 'Ya, Aktifkan'}</span>
               </button>
             </div>
           </div>

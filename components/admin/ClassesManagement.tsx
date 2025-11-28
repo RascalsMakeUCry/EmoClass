@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { School, UserPlus, Users, Trash2, Check, X, Plus, Edit2, Upload, Download } from 'lucide-react';
 import Toast from '@/components/Toast';
+import LoadingSpinner from '@/components/LoadingSpinner';
 import * as XLSX from 'xlsx';
 
 interface Class {
@@ -44,6 +45,9 @@ export default function ClassesManagement() {
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [showBulkImport, setShowBulkImport] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isDeletingClass, setIsDeletingClass] = useState(false);
+  const [isDeletingStudent, setIsDeletingStudent] = useState(false);
 
   useEffect(() => {
     fetchClasses();
@@ -91,6 +95,7 @@ export default function ClassesManagement() {
 
   const handleCreateClass = async (e: React.FormEvent) => {
     e.preventDefault();
+    setIsSubmitting(true);
 
     try {
       if (editingClassId) {
@@ -132,6 +137,8 @@ export default function ClassesManagement() {
         message: editingClassId ? 'Gagal mengupdate kelas' : 'Gagal membuat kelas', 
         type: 'error' 
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -150,6 +157,8 @@ export default function ClassesManagement() {
   const handleCreateStudent = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedClass) return;
+    
+    setIsSubmitting(true);
 
     try {
       if (editingStudentId) {
@@ -192,6 +201,8 @@ export default function ClassesManagement() {
         message: editingStudentId ? 'Gagal mengupdate siswa' : 'Gagal menambahkan siswa', 
         type: 'error' 
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -208,6 +219,8 @@ export default function ClassesManagement() {
   };
 
   const handleDeleteClass = async () => {
+    setIsDeletingClass(true);
+    
     try {
       const res = await fetch(`/api/admin/classes/${deleteClassConfirm.id}`, {
         method: 'DELETE',
@@ -224,10 +237,14 @@ export default function ClassesManagement() {
     } catch (err) {
       setToast({ message: 'Gagal menghapus kelas', type: 'error' });
       setDeleteClassConfirm({ show: false, id: '', name: '', studentCount: 0 });
+    } finally {
+      setIsDeletingClass(false);
     }
   };
 
   const handleDeleteStudent = async () => {
+    setIsDeletingStudent(true);
+    
     try {
       const res = await fetch(`/api/admin/students/${deleteStudentConfirm.id}`, {
         method: 'DELETE',
@@ -244,6 +261,8 @@ export default function ClassesManagement() {
     } catch (err) {
       setToast({ message: 'Gagal menghapus siswa', type: 'error' });
       setDeleteStudentConfirm({ show: false, id: '', name: '' });
+    } finally {
+      setIsDeletingStudent(false);
     }
   };
 
@@ -373,14 +392,17 @@ export default function ClassesManagement() {
                 <div className="flex gap-2">
                   <button
                     type="submit"
-                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm"
+                    disabled={isSubmitting}
+                    className="flex-1 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 text-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                   >
-                    {editingClassId ? 'Update' : 'Simpan'}
+                    {isSubmitting && <LoadingSpinner size="sm" />}
+                    <span>{editingClassId ? 'Update' : 'Simpan'}</span>
                   </button>
                   <button
                     type="button"
                     onClick={handleCancelEditClass}
-                    className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm"
+                    disabled={isSubmitting}
+                    className="px-3 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     Batal
                   </button>
@@ -504,14 +526,17 @@ export default function ClassesManagement() {
                   <div className="flex gap-2">
                     <button
                       type="submit"
-                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      disabled={isSubmitting}
+                      className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
                     >
-                      {editingStudentId ? 'Update' : 'Tambah Siswa'}
+                      {isSubmitting && <LoadingSpinner size="sm" />}
+                      <span>{editingStudentId ? 'Update' : 'Tambah Siswa'}</span>
                     </button>
                     <button
                       type="button"
                       onClick={handleCancelEditStudent}
-                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300"
+                      disabled={isSubmitting}
+                      className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       Batal
                     </button>
@@ -692,9 +717,11 @@ export default function ClassesManagement() {
               </button>
               <button
                 onClick={handleDeleteClass}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl"
+                disabled={isDeletingClass}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Ya, Hapus
+                {isDeletingClass && <LoadingSpinner size="sm" />}
+                <span>Ya, Hapus</span>
               </button>
             </div>
           </div>
@@ -737,9 +764,11 @@ export default function ClassesManagement() {
               </button>
               <button
                 onClick={handleDeleteStudent}
-                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl"
+                disabled={isDeletingStudent}
+                className="flex-1 px-6 py-3 bg-gradient-to-r from-red-500 to-red-600 text-white font-semibold rounded-xl hover:from-red-600 hover:to-red-700 transition-all shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
               >
-                Ya, Hapus
+                {isDeletingStudent && <LoadingSpinner size="sm" />}
+                <span>Ya, Hapus</span>
               </button>
             </div>
           </div>

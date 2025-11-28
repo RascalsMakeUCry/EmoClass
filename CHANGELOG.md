@@ -4,6 +4,33 @@ All notable changes to EmoClass project.
 
 ## [2.3.0] - 2025-11-28
 
+### ⏳ Loading States for All Database Operations
+
+#### Added
+- **Loading Indicators on Buttons** 🔄
+  - Spinner animation saat proses database berjalan
+  - Button disabled untuk prevent double-click
+  - Visual feedback yang jelas untuk user
+  - Consistent UX across all CRUD operations
+
+#### Features
+- ✅ Loading spinner component (reusable)
+- ✅ Disabled state saat loading
+- ✅ Opacity 50% untuk visual feedback
+- ✅ Cursor not-allowed saat disabled
+- ✅ Smooth animations
+
+#### Affected Components
+- **ClassesManagement**: Create, Update, Delete class & students
+- **TeachersManagement**: Create, Update, Delete, Toggle status teachers
+- All confirmation modals
+
+#### Benefits
+- 🚫 Prevent double submissions
+- 👁️ Clear visual feedback
+- ⚡ Better UX
+- 🐛 Reduce bugs from multiple clicks
+
 ### 📊 Bulk Import Students from Excel
 
 #### Added
