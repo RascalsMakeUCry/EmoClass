@@ -1,20 +1,20 @@
 // API untuk membuat notifikasi manual (event-based)
 // Digunakan oleh sistem lain seperti Telegram bot, admin actions, dll
 
-import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase-admin';
-import { verifyAuthRequest } from '@/lib/auth';
+import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "@/lib/supabase-admin";
+import { verifyAuthRequest } from "@/lib/auth";
 
 export async function POST(request: NextRequest) {
   try {
     // Verify authentication
     const user = await verifyAuthRequest(request);
     if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const body = await request.json();
-    const { 
+    const {
       target, // 'all_teachers', 'specific_user', 'all_users'
       user_id, // Required if target is 'specific_user'
       type, // 'alert', 'system', 'summary'
@@ -27,14 +27,17 @@ export async function POST(request: NextRequest) {
     // Validation
     if (!target || !type || !priority || !title || !message) {
       return NextResponse.json(
-        { error: 'Missing required fields: target, type, priority, title, message' },
+        {
+          error:
+            "Missing required fields: target, type, priority, title, message",
+        },
         { status: 400 }
       );
     }
 
-    if (target === 'specific_user' && !user_id) {
+    if (target === "specific_user" && !user_id) {
       return NextResponse.json(
-        { error: 'user_id is required when target is specific_user' },
+        { error: "user_id is required when target is specific_user" },
         { status: 400 }
       );
     }
@@ -42,37 +45,40 @@ export async function POST(request: NextRequest) {
     // Get target users
     let targetUsers: { id: string }[] = [];
 
-    if (target === 'all_teachers') {
+    if (target === "all_teachers") {
       const { data } = await supabase
-        .from('users')
-        .select('id')
-        .eq('role', 'teacher')
-        .eq('is_active', true);
+        .from("users")
+        .select("id")
+        .eq("role", "teacher")
+        .eq("is_active", true);
       targetUsers = data || [];
-    } else if (target === 'all_users') {
+    } else if (target === "all_users") {
       const { data } = await supabase
-        .from('users')
-        .select('id')
-        .eq('is_active', true);
+        .from("users")
+        .select("id")
+        .eq("is_active", true);
       targetUsers = data || [];
-    } else if (target === 'specific_user') {
+    } else if (target === "specific_user") {
       targetUsers = [{ id: user_id }];
     } else {
       return NextResponse.json(
-        { error: 'Invalid target. Must be: all_teachers, all_users, or specific_user' },
+        {
+          error:
+            "Invalid target. Must be: all_teachers, all_users, or specific_user",
+        },
         { status: 400 }
       );
     }
 
     if (targetUsers.length === 0) {
       return NextResponse.json(
-        { error: 'No target users found' },
+        { error: "No target users found" },
         { status: 404 }
       );
     }
 
     // Create notifications
-    const notifications = targetUsers.map(u => ({
+    const notifications = targetUsers.map((u) => ({
       user_id: u.id,
       type,
       priority,
@@ -82,12 +88,12 @@ export async function POST(request: NextRequest) {
         ...metadata,
         created_by: user.id,
         created_by_role: user.role,
-        source: 'manual',
+        source: "manual",
       },
     }));
 
     const { error } = await supabase
-      .from('notifications')
+      .from("notifications")
       .insert(notifications);
 
     if (error) throw error;
@@ -98,9 +104,9 @@ export async function POST(request: NextRequest) {
       count: targetUsers.length,
     });
   } catch (error) {
-    console.error('Create notification error:', error);
+    console.error("Create notification error:", error);
     return NextResponse.json(
-      { error: 'Failed to create notification' },
+      { error: "Failed to create notification" },
       { status: 500 }
     );
   }
