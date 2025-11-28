@@ -3,7 +3,8 @@ export default function NotificationsPage() {
     <div 
       className="min-h-screen p-8"
       style={{ 
-        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className="max-w-4xl mx-auto">

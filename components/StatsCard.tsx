@@ -15,19 +15,19 @@ interface StatsCardProps {
 
 const colorClasses = {
   green: {
-    bg: 'bg-white',
+    bg: 'bg-white/40',
     color: '#C7EA83',
   },
   yellow: {
-    bg: 'bg-white',
+    bg: 'bg-white/40',
     color: '#EFBC60',
   },
   red: {
-    bg: 'bg-white',
+    bg: 'bg-white/40',
     color: '#ED8D8D',
   },
   blue: {
-    bg: 'bg-white',
+    bg: 'bg-white/40',
     color: '#D8C4FF',
   },
 };
@@ -66,7 +66,8 @@ export default function StatsCard({
                 cx="32"
                 cy="32"
                 r="28"
-                stroke="#E5E7EB"
+                stroke="#ffffff"
+                //stroke="#E5E7EB"
                 strokeWidth="6"
                 fill="none"
               />

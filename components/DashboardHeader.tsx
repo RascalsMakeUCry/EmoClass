@@ -126,14 +126,14 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-    <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 mb-6">
+    <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 mb-6">
       <div className="flex items-center justify-between gap-4">
         {/* Left: Title + Date */}
         <div className="flex-1 min-w-0">
           <h1 className="text-xl font-bold text-gray-900">
             Dashboard Guru
           </h1>
-          <p className="text-xs text-gray-600 font-medium mt-0.5">
+          <p className="text-xs text-gray-500 font-medium mt-0.5">
             {formatIndonesianDate(new Date())}
           </p>
         </div>

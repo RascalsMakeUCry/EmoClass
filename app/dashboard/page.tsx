@@ -210,7 +210,8 @@ export default function DashboardPage() {
     <div 
       className="min-h-screen p-4 lg:p-8"
       style={{ 
-        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className="max-w-7xl mx-auto relative">
@@ -220,13 +221,13 @@ export default function DashboardPage() {
         </div>
 
         {/* Class Selector and Controls */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
+        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div className="flex items-center gap-4">
               {/* Realtime Status Indicator */}
               <div className="flex items-center gap-2">
                 <div className={`w-3 h-3 rounded-full ${
-                  realtimeStatus === 'connected' ? 'bg-green-500' :
+                  realtimeStatus === 'connected' ? 'bg-[#C7EA83]' :
                   realtimeStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
                   'bg-red-500'
                 }`} />
@@ -250,11 +251,11 @@ export default function DashboardPage() {
             <select
               value={selectedClassId}
               onChange={(e) => setSelectedClassId(e.target.value)}
-              className="px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium transition-colors"
+              className="px-4 py-2 border-2 border-gray-100 rounded-xl focus:ring-2 focus:ring-amber-300 bg-white text-gray-800 font-medium transition-colors"
             >
               <option value="" className="text-gray-900">-- Pilih Kelas --</option>
               {classes.map((cls) => (
-                <option key={cls.id} value={cls.id} className="text-gray-900">
+                <option key={cls.id} value={cls.id} className="text-gray-800">
                   {cls.name}
                 </option>
               ))}
@@ -288,7 +289,7 @@ export default function DashboardPage() {
                   <StatsCard
                     title={`${dashboardStats.studentsCheckedIn.count}/${dashboardStats.studentsCheckedIn.total}`}
                     subtitle="Students Checked In"
-                    value={`${dashboardStats.studentsCheckedIn.percentage}% participation today`}
+                    value={`${dashboardStats.studentsCheckedIn.percentage}% partisipasi hari ini`}
                     icon="✓"
                     color="blue"
                   />
@@ -297,7 +298,7 @@ export default function DashboardPage() {
                   <StatsCard
                     title="Positive"
                     subtitle="Energy"
-                    value={`${dashboardStats.positiveEmotions.count} students feeling happy`}
+                    value={`${dashboardStats.positiveEmotions.count} siswa merasa senang`}
                     icon="😊"
                     color="green"
                     percentage={`${dashboardStats.positiveEmotions.percentage}%`}
@@ -307,7 +308,7 @@ export default function DashboardPage() {
                   <StatsCard
                     title="Normal"
                     subtitle="Energy"
-                    value={`${emotionData.normal} students need energy boost`}
+                    value={`${emotionData.normal} siswa butuh semangat`}
                     icon="😴"
                     color="yellow"
                     percentage={`${totalStudents > 0 ? Math.round((emotionData.normal / totalStudents) * 100) : 0}%`}
@@ -317,7 +318,7 @@ export default function DashboardPage() {
                   <StatsCard
                     title="Needs"
                     subtitle="Support"
-                    value={`${dashboardStats.needsSupport.count} students anxious or sad`}
+                    value={`${dashboardStats.needsSupport.count} siswa perlu perhatian`}
                     icon="⚠️"
                     color="red"
                     percentage={`${dashboardStats.needsSupport.percentage}%`}
@@ -335,7 +336,7 @@ export default function DashboardPage() {
             {isInitialLoad ? (
               <PieChartSkeleton />
             ) : (
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '200ms' }}>
+              <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '200ms' }}>
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">
                   Distribusi Emosi Kelas
                 </h2>
@@ -347,7 +348,7 @@ export default function DashboardPage() {
             {isInitialLoad ? (
               <ProgressCircleSkeleton />
             ) : (
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '250ms' }}>
+              <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '250ms' }}>
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">
                   Progress Check-in
                 </h2>
@@ -360,7 +361,7 @@ export default function DashboardPage() {
                         cx="80"
                         cy="80"
                         r="70"
-                        stroke="#e5e7eb"
+                        stroke="#ffffff"
                         strokeWidth="12"
                         fill="none"
                       />
@@ -369,7 +370,7 @@ export default function DashboardPage() {
                         cx="80"
                         cy="80"
                         r="70"
-                        stroke="#3b82f6"
+                        stroke="#EFBC60"
                         strokeWidth="12"
                         fill="none"
                         strokeDasharray={`${2 * Math.PI * 70}`}
@@ -397,7 +398,7 @@ export default function DashboardPage() {
                   {/* Status badge */}
                   {checkedInCount === totalStudents && totalStudents > 0 && (
                     <div className="mt-4 px-4 py-2 bg-green-100 text-green-800 rounded-full font-semibold">
-                      ✓ Semua siswa sudah check-in!
+                      Semua siswa sudah check-in!
                     </div>
                   )}
                 </div>
@@ -408,7 +409,7 @@ export default function DashboardPage() {
             {isInitialLoad ? (
               <AttentionListSkeleton />
             ) : (
-              <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 lg:col-span-2 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '300ms' }}>
+              <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-8 lg:col-span-2 hover:shadow-2xl transition-all duration-300 animate-fadeInScale" style={{ animationDelay: '300ms' }}>
                 <h2 className="text-2xl font-bold text-gray-800 mb-6">
                   Siswa yang Perlu Perhatian
                 </h2>
@@ -417,13 +418,13 @@ export default function DashboardPage() {
                 {studentsNeedingAttention.length > 0 && (
                   <div className="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-xl">
                     <div className="flex items-start gap-3">
-                      <div className="text-2xl flex-shrink-0">📱</div>
+                      <div className="text-2xl flex-shrink-0"></div>
                       <div className="flex-1">
                         <p className="text-sm font-medium text-blue-900 mb-1">
                           Notifikasi Otomatis Aktif
                         </p>
                         <p className="text-xs text-blue-700">
-                          Sistem akan otomatis mengirim alert ke Guru BK via Telegram Bot jika siswa menunjukkan emosi negatif 3 hari berturut-turut.
+                          Sistem akan otomatis mengirim alert ke Guru BK via Telegram Bot jika siswa menunjukkan emosi negatif selama 3 hari berturut-turut.
                         </p>
                       </div>
                     </div>
@@ -473,7 +474,7 @@ export default function DashboardPage() {
                       {/* Alert Badge */}
                       <div className="flex-shrink-0">
                         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                          Perlu Perhatian
+                          Perlu Perhatian !
                         </span>
                       </div>
                     </div>

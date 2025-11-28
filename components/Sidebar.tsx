@@ -27,19 +27,19 @@ const navigationItems: NavItem[] = [
   },
   {
     id: 'input-emotion',
-    label: 'Input Emotion',
+    label: 'Input Siswa',
     href: '/input-emotion',
     icon: <Heart className="w-5 h-5" />,
   },
   {
     id: 'reports',
-    label: 'Reports',
+    label: 'Laporan',
     href: '/reports',
     icon: <FileText className="w-5 h-5" />,
   },
   {
     id: 'notifications',
-    label: 'Notifications',
+    label: 'Notifikasi',
     href: '/notifications',
     icon: <Bell className="w-5 h-5" />,
   },
@@ -77,7 +77,7 @@ export default function Sidebar({ isCollapsed = false, onToggle }: SidebarProps)
       {/* Mobile Menu Button */}
       <button
         onClick={toggleMobile}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-50 transition-colors"
+        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
         aria-label="Toggle menu"
       >
         <span className="text-xl">{isMobileOpen ? '✕' : '☰'}</span>
@@ -95,7 +95,7 @@ export default function Sidebar({ isCollapsed = false, onToggle }: SidebarProps)
       <aside
         role="complementary"
         className={`
-          fixed top-0 left-0 h-full bg-white/95 backdrop-blur-sm border-r border-gray-200 z-40
+          fixed top-0 left-0 h-full bg-white/100 backdrop-blur-sm border-r border-gray-200 z-40
           transition-transform duration-300 ease-in-out
           ${isMobileOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:translate-x-0
@@ -135,20 +135,19 @@ export default function Sidebar({ isCollapsed = false, onToggle }: SidebarProps)
                   href={item.href}
                   onClick={() => setIsMobileOpen(false)}
                   className={`
-                    relative flex items-center gap-4 px-4 py-3.5 rounded-lg
-                    transition-all duration-200 font-poppins
-                    ${
-                      active
-                        ? 'text-amber-500 font-semibold'
-                        : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900'
-                    }
+                    relative flex items-center gap-4 px-4 py-3.5 rounded-lg font-poppins
                     ${isCollapsed ? 'justify-center' : ''}
+                    ${active
+                      ? 'text-[#FEBE40] font-semibold'
+                      : 'text-gray-600'
+                    }
+                    ${!active ? 'transition-all duration-300 ease-out hover:bg-[#FEBE40]/80 hover:translate-x-1 hover:shadow-[0_10px_30px_rgba(254,190,64,0.12)]' : ''}
                   `}
                   style={{ fontFamily: 'var(--font-poppins)' }}
                 >
                   {/* Active indicator */}
                   {active && (
-                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 bg-amber-500 rounded-r-full" />
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-10 rounded-r-full" style={{ background: '#FEBE40' }} />
                   )}
                   <span className="flex-shrink-0">{item.icon}</span>
                   {!isCollapsed && (
@@ -165,7 +164,7 @@ export default function Sidebar({ isCollapsed = false, onToggle }: SidebarProps)
               onClick={() => setShowLogoutModal(true)}
               className={`
                 w-full flex items-center gap-4 px-4 py-3.5 rounded-lg
-                text-gray-400 hover:bg-gray-50 hover:text-gray-600 transition-colors font-poppins
+                text-gray-600 hover:bg-gray-50 hover:text-red-600 transition-colors font-poppins
                 ${isCollapsed ? 'justify-center' : ''}
               `}
               style={{ fontFamily: 'var(--font-poppins)' }}
@@ -202,8 +201,8 @@ export default function Sidebar({ isCollapsed = false, onToggle }: SidebarProps)
 
             {/* Icon */}
             <div className="flex justify-center mb-6">
-              <div className="w-20 h-20 bg-gradient-to-br from-amber-100 to-amber-200 rounded-full flex items-center justify-center">
-                <LogOut className="w-10 h-10 text-amber-600" />
+              <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: 'linear-gradient(135deg, rgba(254,190,64,0.12), rgba(254,190,64,0.04))' }}>
+                <LogOut className="w-10 h-10" style={{ color: '#FEBE40' }} />
               </div>
             </div>
 

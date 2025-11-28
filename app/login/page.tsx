@@ -82,14 +82,6 @@ export default function LoginPage() {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Error message */}
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-start gap-2">
-              <span className="text-red-500 mt-0.5">⚠️</span>
-              <span className="text-sm">{error}</span>
-            </div>
-          )}
-
           {/* Email input */}
           <div className="space-y-2">
             <label htmlFor="email" className="block text-sm font-medium text-gray-600">
@@ -97,14 +89,18 @@ export default function LoginPage() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Mail className="h-5 w-5 text-gray-400" />
+                <Mail className={`h-5 w-5 ${error ? 'text-red-400' : 'text-gray-400'}`} />
               </div>
               <input
                 id="email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full pl-12 pr-4 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400"
+                className={`w-full pl-12 pr-12 py-3.5 rounded-xl transition-all duration-200 ${
+                  error
+                    ? 'bg-red-50 border border-red-200 text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-400'
+                    : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent'
+                }`}
                 placeholder="admin@emoclass.com"
                 required
                 autoComplete="email"
@@ -119,14 +115,18 @@ export default function LoginPage() {
             </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-gray-400" />
+                <Lock className={`h-5 w-5 ${error ? 'text-red-400' : 'text-gray-400'}`} />
               </div>
               <input
                 id="password"
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full pl-12 pr-12 py-3.5 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-amber-400 focus:border-transparent transition-all duration-200 text-gray-900 placeholder-gray-400"
+                className={`w-full pl-12 pr-12 py-3.5 rounded-xl transition-all duration-200 ${
+                  error
+                    ? 'bg-red-50 border border-red-200 text-red-900 placeholder-red-400 focus:ring-2 focus:ring-red-400'
+                    : 'bg-gray-50 border border-gray-200 text-gray-900 placeholder-gray-400 focus:ring-2 focus:ring-amber-400 focus:border-transparent'
+                }`}
                 placeholder="••••••••"
                 required
                 autoComplete="current-password"
@@ -134,7 +134,9 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
+                className={`absolute inset-y-0 right-0 pr-4 flex items-center transition-colors ${
+                  error ? 'text-red-400 hover:text-red-600' : 'text-gray-400 hover:text-gray-600'
+                }`}
                 tabIndex={-1}
               >
                 {showPassword ? (
@@ -145,6 +147,11 @@ export default function LoginPage() {
               </button>
             </div>
           </div>
+
+          {/* Error text (centered) */}
+          {error && (
+            <p className="text-center text-sm text-red-700">{error}</p>
+          )}
 
           {/* Submit button */}
           <button

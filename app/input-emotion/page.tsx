@@ -185,7 +185,8 @@ export default function CheckInPage() {
       className="min-h-screen p-4" 
       style={{ 
         fontFamily: 'var(--font-poppins)',
-        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+        backgroundAttachment: 'fixed',
       }}
     >
       <div className="max-w-2xl mx-auto">
