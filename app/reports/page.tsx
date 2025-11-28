@@ -13,11 +13,19 @@ interface DailyData {
   total: number;
 }
 
+// Helper function to get local date in YYYY-MM-DD format
+function getLocalDateString(date: Date = new Date()): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
 export default function ReportsPage() {
   const [classes, setClasses] = useState<Class[]>([]);
   const [selectedClassId, setSelectedClassId] = useState<string>('');
   const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>(getTodayDate());
+  const [endDate, setEndDate] = useState<string>(getLocalDateString());
   const [dailyData, setDailyData] = useState<DailyData[]>([]);
   const [totalEmotions, setTotalEmotions] = useState<Record<EmotionType, number>>({
     happy: 0,
@@ -32,7 +40,7 @@ export default function ReportsPage() {
     // Set default start date to 7 days ago
     const sevenDaysAgo = new Date();
     sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-    setStartDate(sevenDaysAgo.toISOString().split('T')[0]);
+    setStartDate(getLocalDateString(sevenDaysAgo));
   }, []);
 
   useEffect(() => {
@@ -211,7 +219,7 @@ export default function ReportsPage() {
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   min={startDate}
-                  max={getTodayDate()}
+                  max={getLocalDateString()}
                   className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium shadow-sm hover:border-blue-300 transition-colors"
                 />
               </div>

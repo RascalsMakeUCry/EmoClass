@@ -109,8 +109,31 @@ if (checkinsError) {
 - [ ] Realtime update bekerja (Live Update Aktif)
 - [ ] Students needing attention muncul jika ada siswa stressed
 
+## Related Fixes
+
+### Reports Page Date Selection
+**Problem**: Tidak bisa memilih tanggal hari ini di menu Laporan
+
+**Root Cause**: Sama dengan dashboard - menggunakan `getTodayDate()` yang return UTC date
+
+**Solution**: 
+```typescript
+// Helper function untuk get local date
+function getLocalDateString(date: Date = new Date()): string {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
+
+// Gunakan di state initialization dan max attribute
+const [endDate, setEndDate] = useState<string>(getLocalDateString());
+<input max={getLocalDateString()} />
+```
+
 ## Notes
 
 - Setelah fix, **hapus console.log** untuk production
 - Pastikan timezone server dan client konsisten
 - Test dengan berbagai timezone jika aplikasi digunakan di berbagai lokasi
+- Fix ini juga diterapkan di Reports page untuk date picker

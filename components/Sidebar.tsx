@@ -118,9 +118,9 @@ export default function Sidebar({
           transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
         }}
       >
-        <div className="flex flex-col h-full">
+        <div className="flex flex-col h-full overflow-hidden">
           {/* Logo Section */}
-          <div className="p-6 border-b border-gray-100">
+          <div className="p-4 lg:p-6 flex-shrink-0">
             <Link
               href="/dashboard"
               className="flex items-center justify-center"
@@ -144,8 +144,13 @@ export default function Sidebar({
             </Link>
           </div>
 
-          {/* Navigation Items */}
-          <nav className="flex-1 p-6 space-y-3">
+          {/* Navigation Items - Scrollable */}
+          <nav className="flex-1 p-4 lg:p-6 pb-2 space-y-2 lg:space-y-3 overflow-y-auto overflow-x-hidden"
+            style={{ 
+              scrollbarWidth: 'thin',
+              scrollbarColor: '#d1d5db transparent'
+            }}
+          >
             {navigationItems.map((item) => {
               const active = isActive(item.href);
               return (
@@ -183,8 +188,8 @@ export default function Sidebar({
             })}
           </nav>
 
-          {/* Logout Button */}
-          <div className="p-6 border-t border-gray-100">
+          {/* Logout Button - Hidden on mobile (use navbar profile menu), visible on desktop */}
+          <div className="hidden lg:flex p-6 border-t border-gray-100 flex-shrink-0 bg-white/100 items-center">
             <button
               onClick={() => setShowLogoutModal(true)}
               className={`

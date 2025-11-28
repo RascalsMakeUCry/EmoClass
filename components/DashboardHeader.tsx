@@ -167,35 +167,36 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
           {/* Enhanced Dropdown Menu */}
           {showDropdown && (
-            <>
-              {/* Backdrop */}
-              <div
-                className="fixed inset-0 z-40"
-                onClick={() => setShowDropdown(false)}
-              />
-              
-              {/* Dropdown */}
-              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeInFast">
-                <div className="px-4 py-3 border-b border-gray-100">
-                  <p className="text-sm font-bold text-gray-900">{displayUser.name}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Guru EmoClass</p>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowDropdown(false);
-                    setShowLogoutModal(true);
-                  }}
-                  className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3 font-medium mt-1"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>Logout</span>
-                </button>
+            <div className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeInFast">
+              <div className="px-4 py-3 border-b border-gray-100">
+                <p className="text-sm font-bold text-gray-900">{displayUser.name}</p>
+                <p className="text-xs text-gray-500 mt-0.5">Guru EmoClass</p>
               </div>
-            </>
+              <button
+                onClick={() => {
+                  setShowDropdown(false);
+                  setShowLogoutModal(true);
+                }}
+                className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3 font-medium mt-1"
+              >
+                <LogOut className="w-4 h-4" />
+                <span>Logout</span>
+              </button>
+            </div>
           )}
         </div>
       </div>
     </div>
+
+      {/* Backdrop for dropdown - Click outside to close */}
+      {mounted && showDropdown && createPortal(
+        <div
+          className="fixed inset-0 z-[35] bg-transparent"
+          onClick={() => setShowDropdown(false)}
+          aria-label="Close dropdown"
+        />,
+        document.body
+      )}
 
       {/* Logout Confirmation Modal */}
       {mounted && showLogoutModal && createPortal(

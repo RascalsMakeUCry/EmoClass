@@ -42,8 +42,9 @@ Mobile navbar yang sticky di bagian atas layar untuk meningkatkan UX di perangka
 - Dropdown menu dengan:
   - Nama user
   - Role (Guru EmoClass)
-  - Logout button
+  - Logout button (primary logout method di mobile)
 - Auto-close saat klik di luar
+- Logout di sidebar disembunyikan di mobile (hidden lg:flex)
 
 ## File Structure
 
@@ -133,6 +134,20 @@ Tidak perlu setup tambahan! Fitur ini otomatis aktif di semua halaman yang mengg
 2. **Overlay Fade**: Backdrop menggunakan `animate-fadeInFast` untuk fade in effect
 3. **Transition**: Hanya transform yang di-animate untuk performa optimal
 
+## Sidebar Layout Improvements
+
+### Scrollable Navigation
+- **Logo section**: `flex-shrink-0` - tidak akan shrink
+- **Navigation items**: `overflow-y-auto` - bisa di-scroll jika konten panjang
+- **Logout button**: `flex-shrink-0` + `bg-white` - selalu terlihat di bawah
+- **Container**: `overflow-hidden` - prevent scroll di container utama
+
+### Benefits
+1. Logout button selalu terlihat di mobile
+2. Navigation items bisa di-scroll jika banyak menu
+3. Logo tetap di atas, logout tetap di bawah
+4. Smooth scrolling untuk UX yang lebih baik
+
 ## Troubleshooting
 
 ### Animasi tidak terlihat smooth atau tidak ada
@@ -140,3 +155,8 @@ Tidak perlu setup tambahan! Fitur ini otomatis aktif di semua halaman yang mengg
 2. **Restart dev server**: Stop dan start ulang `npm run dev`
 3. **Clear browser cache**: Buka DevTools > Network > Disable cache
 4. **Check responsive mode**: Pastikan browser dalam mode mobile (< 1024px width)
+
+### Logout button tidak terlihat di mobile
+- **Solusi**: Logout button di sidebar disembunyikan di mobile (`hidden lg:flex`)
+- User bisa logout dari **profile menu di navbar mobile** (klik avatar di kanan atas)
+- Di desktop, logout tetap ada di sidebar seperti biasa
