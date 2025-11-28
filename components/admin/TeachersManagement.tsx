@@ -208,7 +208,7 @@ export default function TeachersManagement() {
       )}
 
       {/* Header */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg p-6">
+      <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
         <div className="flex justify-between items-center">
           <div>
             <h2 className="text-xl font-semibold text-gray-800">Manajemen Akun Guru</h2>
@@ -225,10 +225,10 @@ export default function TeachersManagement() {
       </div>
 
       {/* Table */}
-      <div className="bg-white/80 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
+      <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg overflow-hidden">
         <div className="overflow-x-auto">
           <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+            <thead className="bg-gray-50/40">
               <tr>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                   Nama
@@ -247,7 +247,7 @@ export default function TeachersManagement() {
                 </th>
               </tr>
             </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
+            <tbody className="bg-white/40 divide-y divide-gray-200">
               {teachers.map((teacher) => (
                 <tr key={teacher.id} className="hover:bg-gray-50 transition-colors">
                   <td className="px-6 py-4 whitespace-nowrap">

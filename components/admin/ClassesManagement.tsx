@@ -358,7 +358,7 @@ export default function ClassesManagement() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Classes List */}
         <div className="lg:col-span-1">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white/40 rounded-xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-4">
               <h3 className="font-semibold text-gray-800">Daftar Kelas</h3>
               <button
@@ -417,7 +417,7 @@ export default function ClassesManagement() {
                   className={`p-3 rounded-lg cursor-pointer transition-colors ${
                     selectedClass === cls.id
                       ? 'bg-blue-50 border-2 border-blue-500'
-                      : 'bg-gray-50 border-2 border-transparent hover:bg-gray-100'
+                      : 'bg-white/90 border-2 border-transparent hover:bg-gray-100'
                   }`}
                   onClick={() => setSelectedClass(cls.id)}
                 >
@@ -471,7 +471,7 @@ export default function ClassesManagement() {
 
         {/* Students List */}
         <div className="lg:col-span-2">
-          <div className="bg-white rounded-xl shadow-sm p-6">
+          <div className="bg-white/40 rounded-xl shadow-sm p-6">
             <div className="flex justify-between items-center mb-6">
               <div>
                 <h3 className="font-semibold text-gray-800">

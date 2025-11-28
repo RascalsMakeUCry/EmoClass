@@ -105,7 +105,7 @@ export default function AdminPage() {
     >
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 mb-6">
+        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 mb-6">
           <div className="flex justify-between items-center">
             <div>
               <h1 className="text-xl font-bold text-gray-900">Admin Dashboard</h1>
@@ -129,7 +129,7 @@ export default function AdminPage() {
         </div>
 
         {/* Tabs */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 mb-6">
+        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 mb-6">
           <div className="flex gap-1 p-2">
             <button
               onClick={() => setActiveTab('teachers')}
