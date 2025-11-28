@@ -3,12 +3,12 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { supabase } from '@/lib/supabase-admin';
-import { verifyAuth } from '@/lib/auth';
+import { verifyAuthRequest } from '@/lib/auth';
 
 export async function POST(request: NextRequest) {
   try {
     // Verify authentication
-    const user = await verifyAuth(request);
+    const user = await verifyAuthRequest(request);
     if (!user) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
