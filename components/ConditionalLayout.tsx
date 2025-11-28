@@ -3,6 +3,15 @@
 import { usePathname } from 'next/navigation';
 import Sidebar from './Sidebar';
 
+/**
+ * ConditionalLayout Component
+ * 
+ * Mengatur tampilan layout berdasarkan halaman:
+ * - Halaman DENGAN Sidebar (Guru): /dashboard, /reports, /notifications, /iot, /input-emotion
+ * - Halaman TANPA Sidebar: /login, /admin (admin punya sidebar sendiri)
+ * 
+ * @param children - React children components
+ */
 export default function ConditionalLayout({
   children,
 }: {
@@ -10,16 +19,18 @@ export default function ConditionalLayout({
 }) {
   const pathname = usePathname();
   
-  // Pages without sidebar
+  // Pages without guru sidebar
+  // - /login: Halaman login tidak perlu sidebar
+  // - /admin: Admin panel punya sidebar sendiri yang berbeda
   const noSidebarPages = ['/login', '/admin'];
-  const shouldShowSidebar = !noSidebarPages.includes(pathname);
+  const shouldShowSidebar = pathname ? !noSidebarPages.some(page => pathname.startsWith(page)) : false;
 
   if (!shouldShowSidebar) {
-    // Full width layout for login and admin
+    // Full width layout untuk login dan admin
     return <>{children}</>;
   }
 
-  // Default layout with sidebar
+  // Default layout dengan sidebar untuk guru
   return (
     <div className="flex min-h-screen">
       <Sidebar />

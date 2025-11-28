@@ -17,7 +17,15 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
  * Handle Supabase errors and return user-friendly Indonesian messages
  */
 export function handleSupabaseError(error: any): string {
-  console.error('Supabase error:', error);
+  // Only log in development
+  if (process.env.NODE_ENV === 'development') {
+    console.error('Supabase error:', error);
+  }
+
+  // Handle empty error object
+  if (!error || (typeof error === 'object' && Object.keys(error).length === 0)) {
+    return 'Terjadi kesalahan yang tidak diketahui. Silakan coba lagi.';
+  }
 
   if (error.message?.includes('Failed to fetch')) {
     return 'Koneksi internet bermasalah. Silakan coba lagi.';

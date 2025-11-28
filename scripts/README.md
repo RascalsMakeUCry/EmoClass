@@ -389,3 +389,204 @@ Jika tidak ingin menggunakan script:
 - `docs/TESTING_ALERT_PATTERNS.md` - Panduan lengkap testing semua pola alert
 - `docs/TELEGRAM_SETUP.md` - Setup Telegram bot
 - `docs/ENHANCED_ALERT_SYSTEM.md` - Dokumentasi sistem alert
+
+
+---
+
+## 🔔 Test Notification System (NEW)
+
+Script untuk menguji sistem notifikasi lengkap termasuk database triggers, table, dan statistik.
+
+### Cara Menjalankan
+
+```bash
+npx tsx scripts/test-notifications.ts
+```
+
+### Apa yang Dilakukan Script Ini?
+
+1. **Check notification table** - Verifikasi tabel notifikasi ada
+2. **Check database triggers** - Verifikasi trigger otomatis
+3. **Check active teachers** - Cek guru yang akan menerima notifikasi
+4. **Create test notification** - Buat notifikasi test
+5. **Check statistics** - Tampilkan statistik notifikasi
+6. **Clean up** - Hapus notifikasi test
+
+### Output yang Diharapkan
+
+```
+🧪 Testing Notification System
+
+1️⃣ Checking notification table...
+✅ Notification table exists
+
+2️⃣ Checking database triggers...
+✅ Triggers: [list of triggers]
+
+3️⃣ Checking active teachers...
+✅ Found 3 active teacher(s):
+   - Ahmad Guru (guru1@example.com)
+   - Siti Guru (guru2@example.com)
+   - Budi Guru (guru3@example.com)
+
+4️⃣ Creating test notification...
+✅ Test notification created:
+   ID: xxx-xxx-xxx
+   Title: 🧪 Test Notification
+   For: Ahmad Guru
+
+5️⃣ Notification statistics...
+   Total notifications: 15
+   Unread: 5
+   By type: { alert: 3, system: 10, summary: 2 }
+   By priority: { urgent: 1, high: 2, normal: 10, low: 2 }
+
+6️⃣ Cleaning up test notification...
+✅ Test notification deleted
+
+📊 Test Summary:
+✅ Notification table: OK
+✅ Active teachers: 3
+✅ Create notification: OK
+✅ Delete notification: OK
+
+🎉 All tests passed!
+```
+
+---
+
+## ⏰ Test Cron Jobs (NEW)
+
+Script untuk menguji semua cron job endpoints (daily summary, weekly summary, missing check-ins).
+
+### Prasyarat
+
+1. ✅ Development server harus running:
+   ```bash
+   npm run dev
+   ```
+
+2. ✅ File `.env.local` sudah dikonfigurasi dengan:
+   - `CRON_SECRET` - Secret key untuk autentikasi cron jobs
+
+### Cara Menjalankan
+
+```bash
+npx tsx scripts/test-cron-jobs.ts
+```
+
+### Apa yang Dilakukan Script Ini?
+
+1. **Test Daily Summary** - Ringkasan check-in harian
+2. **Test Weekly Summary** - Ringkasan check-in mingguan
+3. **Test Missing Check-ins** - Reminder siswa belum check-in
+
+### Output yang Diharapkan
+
+```
+🔔 Testing Cron Jobs
+
+Base URL: http://localhost:3000
+CRON_SECRET: ✅ Set
+
+🧪 Testing Daily Summary...
+   URL: http://localhost:3000/api/cron/daily-summary
+✅ Success!
+   Response: {
+     "success": true,
+     "message": "Daily summary sent to 3 teachers",
+     "stats": {
+       "totalStudents": 50,
+       "checkedInCount": 35,
+       "checkinRate": 70,
+       "happyCount": 20,
+       "normalCount": 10,
+       "stressedCount": 5
+     }
+   }
+
+🧪 Testing Weekly Summary...
+   URL: http://localhost:3000/api/cron/weekly-summary
+✅ Success!
+   Response: {
+     "success": true,
+     "message": "Weekly summary sent to 3 teachers",
+     "stats": {
+       "totalStudents": 50,
+       "activeStudents": 45,
+       "participationRate": 90,
+       "totalCheckins": 280,
+       "avgDailyCheckins": 40,
+       "concerningStudents": 2,
+       "trend": "Positif"
+     }
+   }
+
+🧪 Testing Check Missing Check-ins...
+   URL: http://localhost:3000/api/cron/check-missing-checkins
+✅ Success!
+   Response: {
+     "success": true,
+     "message": "Missing check-in alert sent to 3 teachers",
+     "stats": {
+       "totalStudents": 50,
+       "checkedIn": 35,
+       "missing": 15,
+       "missingPercentage": 30
+     }
+   }
+
+
+📊 Test Summary:
+═══════════════════════════════════════
+✅ Daily Summary: PASSED
+✅ Weekly Summary: PASSED
+✅ Check Missing Check-ins: PASSED
+═══════════════════════════════════════
+Total: 3 | Passed: 3 | Failed: 0
+
+🎉 All cron jobs working correctly!
+
+📝 Next Steps:
+1. Make sure your dev server is running: npm run dev
+2. Check that CRON_SECRET matches in .env.local
+3. For production, deploy to Vercel with vercel.json
+4. Verify cron jobs in Vercel Dashboard → Settings → Cron Jobs
+```
+
+### Troubleshooting
+
+#### ❌ "CRON_SECRET not found"
+
+**Solusi:**
+```bash
+# Tambahkan ke .env.local
+CRON_SECRET=your-random-secret-key-here
+```
+
+#### ❌ "Failed to fetch" atau "Connection refused"
+
+**Penyebab:**
+- Development server belum running
+
+**Solusi:**
+```bash
+npm run dev
+```
+
+#### ❌ "Unauthorized (401)"
+
+**Penyebab:**
+- CRON_SECRET tidak match
+
+**Solusi:**
+1. Pastikan CRON_SECRET sama di `.env.local` dan script
+2. Restart dev server setelah update `.env.local`
+
+---
+
+## 📚 Dokumentasi Lengkap
+
+Untuk dokumentasi lengkap sistem notifikasi, lihat:
+- `docs/NOTIFICATION_SYSTEM_IMPLEMENTATION.md` - Implementasi lengkap 3 opsi
+- `docs/NOTIFICATION_QUICK_GUIDE.md` - Panduan cepat
