@@ -16,6 +16,8 @@ interface NavItem {
 interface SidebarProps {
   isCollapsed?: boolean;
   onToggle?: () => void;
+  isMobileOpen?: boolean;
+  onMobileClose?: () => void;
 }
 
 const navigationItems: NavItem[] = [
@@ -54,12 +56,17 @@ const navigationItems: NavItem[] = [
 export default function Sidebar({
   isCollapsed = false,
   onToggle,
+  isMobileOpen: externalMobileOpen,
+  onMobileClose,
 }: SidebarProps) {
   const pathname = usePathname();
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [internalMobileOpen, setInternalMobileOpen] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+
+  // Use external control if provided, otherwise use internal state
+  const isMobileOpen = externalMobileOpen !== undefined ? externalMobileOpen : internalMobileOpen;
 
   const handleCloseModal = () => {
     setIsClosing(true);
@@ -77,39 +84,39 @@ export default function Sidebar({
   };
 
   const toggleMobile = () => {
-    setIsMobileOpen(!isMobileOpen);
-    onToggle?.();
+    if (onMobileClose) {
+      onMobileClose();
+    } else {
+      setInternalMobileOpen(!internalMobileOpen);
+      onToggle?.();
+    }
   };
 
   return (
     <>
-      {/* Mobile Menu Button */}
-      <button
-        onClick={toggleMobile}
-        className="lg:hidden fixed top-4 left-4 z-50 w-10 h-10 bg-white rounded-lg shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
-        aria-label="Toggle menu"
-      >
-        <span className="text-xl">{isMobileOpen ? "✕" : "☰"}</span>
-      </button>
-
-      {/* Overlay for mobile */}
+      {/* Overlay for mobile with fade animation */}
       {isMobileOpen && (
         <div
-          className="lg:hidden fixed inset-0 bg-black/50 z-30"
+          className="lg:hidden fixed top-[57px] left-0 right-0 bottom-0 bg-black/50 z-30 animate-fadeInFast"
           onClick={toggleMobile}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar with smooth slide animation */}
       <aside
         role="complementary"
         className={`
-          fixed top-0 left-0 h-full bg-white/100 backdrop-blur-sm border-r border-gray-200 z-40
-          transition-transform duration-300 ease-in-out
-          ${isMobileOpen ? "translate-x-0" : "-translate-x-full"}
-          lg:translate-x-0
+          fixed left-0 bg-white/100 backdrop-blur-sm border-r border-gray-200 z-40
+          h-full
+          ${isMobileOpen ? "translate-x-0 top-[57px] h-[calc(100vh-57px)]" : "-translate-x-full top-0"}
+          lg:translate-x-0 lg:top-0 lg:h-full
           ${isCollapsed ? "w-20" : "w-64"}
         `}
+        style={{
+          transitionProperty: 'transform',
+          transitionDuration: '400ms',
+          transitionTimingFunction: 'cubic-bezier(0.4, 0, 0.2, 1)',
+        }}
       >
         <div className="flex flex-col h-full">
           {/* Logo Section */}
@@ -145,7 +152,7 @@ export default function Sidebar({
                 <Link
                   key={item.id}
                   href={item.href}
-                  onClick={() => setIsMobileOpen(false)}
+                  onClick={toggleMobile}
                   className={`
                     relative flex items-center gap-4 px-4 py-3.5 rounded-lg font-poppins
                     ${isCollapsed ? "justify-center" : ""}

@@ -126,34 +126,46 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
 
   return (
     <>
-    <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 mb-6">
-      <div className="flex items-center justify-between gap-4">
-        {/* Left: Title + Date */}
+    <div className="bg-gradient-to-r from-white/50 via-white/40 to-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-white/30 p-6 mb-6 hover:shadow-3xl transition-all duration-300">
+      <div className="flex items-center justify-between gap-6">
+        {/* Left: Enhanced Title + Date + Welcome */}
         <div className="flex-1 min-w-0">
-          <h1 className="text-xl font-bold text-gray-900">
-            Dashboard Guru
-          </h1>
-          <p className="text-xs text-gray-500 font-medium mt-0.5">
-            {formatIndonesianDate(new Date())}
+          <div className="flex items-center gap-3 mb-2">
+            <div className="w-12 h-12 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
+              <span className="text-2xl">📊</span>
+            </div>
+            <div>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">
+                Dashboard Guru
+              </h1>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="text-sm text-gray-600 font-medium">
+                  {formatIndonesianDate(new Date())}
+                </span>
+              </div>
+            </div>
+          </div>
+          <p className="text-sm text-gray-600 ml-15 hidden sm:block">
+            Selamat datang kembali, <span className="font-semibold text-orange-600">{displayUser.name}</span> 👋
           </p>
         </div>
 
-        {/* Right: User Info */}
-        <div className="relative flex-shrink-0">
+        {/* Right: Enhanced User Info - Hidden on mobile, shown on desktop */}
+        <div className="relative flex-shrink-0 hidden lg:flex">
           <button
             onClick={() => setShowDropdown(!showDropdown)}
-            className="flex items-center gap-2 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors"
+            className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/60 transition-all duration-200 border-2 border-transparent hover:border-orange-200 shadow-md hover:shadow-lg"
           >
             <div className="text-right hidden sm:block">
-              <p className="text-sm font-semibold text-gray-800">{displayUser.name}</p>
-              <p className="text-xs text-gray-500">Guru</p>
+              <p className="text-sm font-bold text-gray-900">{displayUser.name}</p>
+              <p className="text-xs text-gray-500 font-medium">Guru</p>
             </div>
-            <div className="w-9 h-9 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-lg shadow-md">
+            <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg ring-2 ring-white">
               {displayUser.avatar}
             </div>
           </button>
 
-          {/* Dropdown Menu */}
+          {/* Enhanced Dropdown Menu */}
           {showDropdown && (
             <>
               {/* Backdrop */}
@@ -163,13 +175,17 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
               />
               
               {/* Dropdown */}
-              <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-xl border border-gray-200 py-2 z-50">
+              <div className="absolute right-0 mt-3 w-56 bg-white rounded-2xl shadow-2xl border-2 border-gray-100 py-2 z-50 animate-fadeInFast">
+                <div className="px-4 py-3 border-b border-gray-100">
+                  <p className="text-sm font-bold text-gray-900">{displayUser.name}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">Guru EmoClass</p>
+                </div>
                 <button
                   onClick={() => {
                     setShowDropdown(false);
                     setShowLogoutModal(true);
                   }}
-                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                  className="w-full px-4 py-3 text-left text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-3 font-medium mt-1"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Logout</span>

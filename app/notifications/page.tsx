@@ -201,16 +201,17 @@ export default function NotificationsPage() {
 
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-6 hover:shadow-2xl transition-shadow">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <Bell className="w-8 h-8 text-white" />
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 sm:p-6 mb-6 hover:shadow-2xl transition-shadow">
+          {/* Mobile: Stack vertically, Desktop: Side by side */}
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
+                <Bell className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
               </div>
-              <div>
-                <h1 className="text-3xl font-bold text-gray-900">Notifikasi</h1>
-                <div className="flex items-center gap-4 mt-1">
-                  <p className="text-sm text-gray-600">
+              <div className="min-w-0 flex-1">
+                <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">Notifikasi</h1>
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 mt-1">
+                  <p className="text-xs sm:text-sm text-gray-600">
                     {unreadCount > 0 ? (
                       <span className="flex items-center gap-2">
                         <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
@@ -223,7 +224,7 @@ export default function NotificationsPage() {
                       </span>
                     )}
                   </p>
-                  <span className="text-gray-300">•</span>
+                  <span className="text-gray-300 hidden sm:inline">•</span>
                   <p className="text-xs text-gray-500 flex items-center gap-1.5">
                     {realtimeStatus === 'connecting' && (
                       <>
@@ -251,7 +252,7 @@ export default function NotificationsPage() {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl font-medium"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl font-medium text-sm sm:text-base whitespace-nowrap"
               >
                 <CheckCheck className="w-4 h-4" />
                 <span>Tandai Semua Dibaca</span>

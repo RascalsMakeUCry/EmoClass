@@ -5,7 +5,7 @@ import { supabase, handleSupabaseError } from '@/lib/supabase';
 import { Class, EmotionType } from '@/lib/types';
 import { getTodayDate } from '@/lib/utils';
 import EmotionPieChart from '@/components/EmotionPieChart';
-import DashboardHeader from '@/components/DashboardHeader';
+
 
 interface DailyData {
   date: string;
@@ -150,21 +150,31 @@ export default function ReportsPage() {
       }}
     >
       <div className="max-w-7xl mx-auto">
-        <DashboardHeader />
-
-        {/* Filters */}
-        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
-          <div className="flex flex-col gap-4">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Laporan Historis</h2>
+        {/* Enhanced Filters Section */}
+        <div className="bg-gradient-to-r from-white/50 via-white/40 to-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-white/30 p-6 mb-8 relative z-10 hover:shadow-3xl transition-all duration-300">
+          <div className="flex flex-col gap-6">
+            {/* Header with Icon */}
+            <div className="flex items-center gap-4">
+              <div className="w-14 h-14 bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-3xl">📈</span>
+              </div>
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900">Laporan Historis</h2>
+                <p className="text-sm text-gray-600 mt-1">Analisis data emosi siswa berdasarkan periode waktu</p>
+              </div>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               {/* Class Selector */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Kelas</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                  <span>📚</span>
+                  <span>Kelas</span>
+                </label>
                 <select
                   value={selectedClassId}
                   onChange={(e) => setSelectedClassId(e.target.value)}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium shadow-sm hover:border-blue-300 transition-colors"
                 >
                   <option value="">-- Pilih Kelas --</option>
                   {classes.map((cls) => (
@@ -177,26 +187,32 @@ export default function ReportsPage() {
 
               {/* Start Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Dari Tanggal</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                  <span>📅</span>
+                  <span>Dari Tanggal</span>
+                </label>
                 <input
                   type="date"
                   value={startDate}
                   onChange={(e) => setStartDate(e.target.value)}
                   max={endDate}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium shadow-sm hover:border-blue-300 transition-colors"
                 />
               </div>
 
               {/* End Date */}
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Sampai Tanggal</label>
+                <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
+                  <span>📅</span>
+                  <span>Sampai Tanggal</span>
+                </label>
                 <input
                   type="date"
                   value={endDate}
                   onChange={(e) => setEndDate(e.target.value)}
                   min={startDate}
                   max={getTodayDate()}
-                  className="w-full px-4 py-2 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900"
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white text-gray-900 font-medium shadow-sm hover:border-blue-300 transition-colors"
                 />
               </div>
             </div>
@@ -215,17 +231,20 @@ export default function ReportsPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
               <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
                 <span className="text-sm text-gray-600 mb-2 block">Total Check-in</span>
-                <div className="text-3xl font-bold text-gray-900">{totalCheckins}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">{totalCheckins}</div>
+                <p className="text-xs text-gray-500">check-in tercatat</p>
               </div>
 
               <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
                 <span className="text-sm text-gray-600 mb-2 block">Jumlah Hari</span>
-                <div className="text-3xl font-bold text-gray-900">{dailyData.length}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">{dailyData.length}</div>
+                <p className="text-xs text-gray-500">hari dalam periode</p>
               </div>
 
               <div className="bg-white/40 backdrop-blur-sm rounded-xl shadow-lg p-6">
                 <span className="text-sm text-gray-600 mb-2 block">Rata-rata per Hari</span>
-                <div className="text-3xl font-bold text-gray-900">{avgPerDay}</div>
+                <div className="text-3xl font-bold text-gray-900 mb-2">{avgPerDay}</div>
+                <p className="text-xs text-gray-500">check-in per hari</p>
               </div>
             </div>
 

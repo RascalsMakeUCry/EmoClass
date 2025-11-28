@@ -111,13 +111,10 @@ export default function DashboardPage() {
     setError('');
 
     try {
-      // Always get today's data
-      const today = getTodayDate();
-      const startOfDay = new Date(today);
-      startOfDay.setHours(0, 0, 0, 0);
-      
-      const endOfDay = new Date(today);
-      endOfDay.setHours(23, 59, 59, 999);
+      // Get today's date in local timezone
+      const now = new Date();
+      const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 0, 0, 0, 0);
+      const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
 
       // Get all students for this class
       const { data: students, error: studentsError } = await supabase
@@ -139,12 +136,20 @@ export default function DashboardPage() {
       // Get check-ins for these students on selected date
       const { data: checkins, error: checkinsError } = await supabase
         .from('emotion_checkins')
-        .select('emotion, student_id')
+        .select('emotion, student_id, created_at')
         .in('student_id', studentIds)
         .gte('created_at', startOfDay.toISOString())
         .lte('created_at', endOfDay.toISOString());
 
       if (checkinsError) throw checkinsError;
+
+      console.log('Dashboard Debug:', {
+        startOfDay: startOfDay.toISOString(),
+        endOfDay: endOfDay.toISOString(),
+        totalStudents: studentIds.length,
+        checkinsFound: checkins?.length || 0,
+        checkins: checkins
+      });
 
       // Count unique students who checked in
       const uniqueStudents = new Set(checkins?.map(c => c.student_id) || []);
@@ -220,46 +225,49 @@ export default function DashboardPage() {
           <DashboardHeader />
         </div>
 
-        {/* Class Selector and Controls */}
-        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-6 mb-8 relative z-10">
-          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-            <div className="flex items-center gap-4">
-              {/* Realtime Status Indicator */}
-              <div className="flex items-center gap-2">
-                <div className={`w-3 h-3 rounded-full ${
-                  realtimeStatus === 'connected' ? 'bg-[#C7EA83]' :
+        {/* Enhanced Class Selector and Controls */}
+        <div className="bg-gradient-to-r from-white/50 via-white/40 to-white/50 backdrop-blur-md rounded-3xl shadow-2xl border-2 border-white/30 p-6 mb-8 relative z-10 hover:shadow-3xl transition-all duration-300">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              {/* Realtime Status Indicator - Enhanced */}
+              <div className="flex items-center gap-3 px-4 py-2.5 bg-white/60 rounded-xl shadow-md border border-white/40">
+                <div className={`w-3 h-3 rounded-full shadow-lg ${
+                  realtimeStatus === 'connected' ? 'bg-green-500 animate-pulse' :
                   realtimeStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
                   'bg-red-500'
                 }`} />
-                <span className="text-sm font-medium text-gray-700">
+                <span className="text-sm font-bold text-gray-800">
                   {realtimeStatus === 'connected' ? 'Live Update Aktif' :
                    realtimeStatus === 'connecting' ? 'Menghubungkan...' :
                    'Live Update Nonaktif'}
                 </span>
               </div>
               
-              {/* Last Updated */}
-              <div className="flex items-center gap-2">
-                <span className="text-gray-400">•</span>
-                <span className="text-xs text-gray-500">
-                  Update terakhir: {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
+              {/* Last Updated - Enhanced */}
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-white/40 rounded-xl">
+                <span className="text-sm text-gray-500">Update Terakhir :</span>
+                <span className="text-sm font-medium text-gray-600">
+                  {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
                 </span>
               </div>
             </div>
 
-            {/* Class Selector */}
-            <select
-              value={selectedClassId}
-              onChange={(e) => setSelectedClassId(e.target.value)}
-              className="px-4 py-2 border-2 border-gray-100 rounded-xl focus:ring-2 focus:ring-amber-300 bg-white text-gray-800 font-medium transition-colors"
-            >
-              <option value="" className="text-gray-900">-- Pilih Kelas --</option>
-              {classes.map((cls) => (
-                <option key={cls.id} value={cls.id} className="text-gray-800">
-                  {cls.name}
-                </option>
-              ))}
-            </select>
+            {/* Class Selector - Enhanced */}
+            <div className="flex items-center gap-3">
+              <label className="text-sm font-bold text-gray-700 hidden sm:block">📚 Pilih Kelas:</label>
+              <select
+                value={selectedClassId}
+                onChange={(e) => setSelectedClassId(e.target.value)}
+                className="px-5 py-3 border-2 border-gray-200 rounded-xl focus:ring-2 focus:ring-orange-400 focus:border-orange-400 bg-white text-gray-900 font-bold shadow-md hover:shadow-lg transition-all hover:border-orange-300 min-w-[200px]"
+              >
+                <option value="" className="text-gray-900">-- Pilih Kelas --</option>
+                {classes.map((cls) => (
+                  <option key={cls.id} value={cls.id} className="text-gray-800">
+                    {cls.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {/* Error Message */}

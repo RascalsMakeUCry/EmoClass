@@ -1,7 +1,9 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import Sidebar from './Sidebar';
+import MobileNavbar from './MobileNavbar';
 
 /**
  * ConditionalLayout Component
@@ -18,6 +20,7 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   
   // Pages without guru sidebar
   // - /login: Halaman login tidak perlu sidebar
@@ -33,8 +36,19 @@ export default function ConditionalLayout({
   // Default layout dengan sidebar untuk guru
   return (
     <div className="flex min-h-screen">
-      <Sidebar />
-      <main className="flex-1">
+      {/* Mobile Navbar - hanya tampil di mobile */}
+      <MobileNavbar 
+        onMenuToggle={() => setIsMobileSidebarOpen(!isMobileSidebarOpen)}
+        isSidebarOpen={isMobileSidebarOpen}
+      />
+      
+      {/* Sidebar - responsive untuk desktop dan mobile */}
+      <Sidebar 
+        isMobileOpen={isMobileSidebarOpen}
+        onMobileClose={() => setIsMobileSidebarOpen(false)}
+      />
+      
+      <main className="flex-1 pt-[57px] lg:pt-0">
         {children}
       </main>
     </div>
