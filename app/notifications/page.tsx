@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { Bell, AlertTriangle, Info, TrendingUp, Check, X, Trash2, CheckCheck, ChevronDown, ChevronUp } from 'lucide-react';
 import Toast from '@/components/Toast';
 import LoadingSpinner from '@/components/LoadingSpinner';
+import { supabase } from '@/lib/supabase';
 
 interface Notification {
   id: string;
@@ -24,9 +25,54 @@ export default function NotificationsPage() {
   const [unreadCount, setUnreadCount] = useState(0);
   const [toast, setToast] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [showReadNotifications, setShowReadNotifications] = useState(true);
+  const [realtimeStatus, setRealtimeStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
 
   useEffect(() => {
     fetchNotifications();
+
+    // Setup realtime subscription for notifications
+    setRealtimeStatus('connecting');
+    
+    const channel = supabase
+      .channel('notifications-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+          schema: 'public',
+          table: 'notifications',
+        },
+        (payload) => {
+          console.log('✅ Realtime notification change:', payload);
+          
+          // Refresh notifications when any change occurs
+          fetchNotifications();
+          
+          // Show toast for new notifications
+          if (payload.eventType === 'INSERT') {
+            const newNotif = payload.new as Notification;
+            setToast({ 
+              message: `🔔 Notifikasi baru: ${newNotif.title}`, 
+              type: 'success' 
+            });
+          }
+        }
+      )
+      .subscribe((status) => {
+        console.log('Realtime subscription status:', status);
+        if (status === 'SUBSCRIBED') {
+          setRealtimeStatus('connected');
+          console.log('✅ Realtime notifications connected!');
+        } else if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          setRealtimeStatus('disconnected');
+          console.error('❌ Realtime connection failed:', status);
+        }
+      });
+
+    // Cleanup subscription on unmount
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, [filter]);
 
   const fetchNotifications = async () => {
@@ -163,19 +209,42 @@ export default function NotificationsPage() {
               </div>
               <div>
                 <h1 className="text-3xl font-bold text-gray-900">Notifikasi</h1>
-                <p className="text-sm text-gray-600 mt-1">
-                  {unreadCount > 0 ? (
-                    <span className="flex items-center gap-2">
-                      <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
-                      {unreadCount} notifikasi belum dibaca
-                    </span>
-                  ) : (
-                    <span className="flex items-center gap-2">
-                      <span className="text-green-600">✓</span>
-                      Semua notifikasi sudah dibaca
-                    </span>
-                  )}
-                </p>
+                <div className="flex items-center gap-4 mt-1">
+                  <p className="text-sm text-gray-600">
+                    {unreadCount > 0 ? (
+                      <span className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                        {unreadCount} notifikasi belum dibaca
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <span className="text-green-600">✓</span>
+                        Semua notifikasi sudah dibaca
+                      </span>
+                    )}
+                  </p>
+                  <span className="text-gray-300">•</span>
+                  <p className="text-xs text-gray-500 flex items-center gap-1.5">
+                    {realtimeStatus === 'connecting' && (
+                      <>
+                        <span className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></span>
+                        <span>Menghubungkan...</span>
+                      </>
+                    )}
+                    {realtimeStatus === 'connected' && (
+                      <>
+                        <span className="w-2 h-2 bg-green-500 rounded-full"></span>
+                        <span className="text-green-600">Live Update Aktif</span>
+                      </>
+                    )}
+                    {realtimeStatus === 'disconnected' && (
+                      <>
+                        <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+                        <span className="text-red-600">Live Update Nonaktif</span>
+                      </>
+                    )}
+                  </p>
+                </div>
               </div>
             </div>
             

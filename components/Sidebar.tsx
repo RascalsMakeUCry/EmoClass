@@ -27,7 +27,7 @@ const navigationItems: NavItem[] = [
   },
   {
     id: "input-emotion",
-    label: "Input Siswa",
+    label: "Input Emotion",
     href: "/input-emotion",
     icon: <Heart className="w-5 h-5" />,
   },

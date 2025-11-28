@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/lib/supabase-admin';
 
 type AlertType = 'stressed';
 
@@ -72,10 +72,18 @@ export async function POST(request: NextRequest) {
     // Send Telegram alert with specific alert type
     const telegramSent = await sendTelegramAlert(studentName, className, alertType);
 
+    // Create notification in database for all teachers
+    const notificationCreated = await createNotificationForTeachers(
+      studentName,
+      className,
+      alertType
+    );
+
     return NextResponse.json({
       success: true,
       alert: true,
       telegramSent,
+      notificationCreated,
       student: studentName,
       class: className,
       alertType,
@@ -87,6 +95,57 @@ export async function POST(request: NextRequest) {
       { success: false, message: 'Internal server error' },
       { status: 500 }
     );
+  }
+}
+
+async function createNotificationForTeachers(
+  studentName: string,
+  className: string,
+  alertType: AlertType
+): Promise<boolean> {
+  try {
+    // Get all active teachers
+    const { data: teachers, error: teachersError } = await supabase
+      .from('users')
+      .select('id')
+      .eq('role', 'teacher')
+      .eq('is_active', true);
+
+    if (teachersError || !teachers || teachers.length === 0) {
+      console.error('❌ Error fetching teachers:', teachersError);
+      return false;
+    }
+
+    // Create notification for each teacher
+    const notifications = teachers.map((teacher) => ({
+      user_id: teacher.id,
+      type: 'alert',
+      priority: 'urgent',
+      title: '🚨 Alert: Siswa Perlu Perhatian Khusus',
+      message: `Siswa ${studentName} dari kelas ${className} menunjukkan emosi sedih/tertekan selama 3 hari berturut-turut. Tindakan segera diperlukan.`,
+      metadata: {
+        student_name: studentName,
+        class_name: className,
+        alert_type: alertType,
+        pattern: '3_consecutive_stressed',
+        source: 'telegram_alert',
+      },
+    }));
+
+    const { error: insertError } = await supabase
+      .from('notifications')
+      .insert(notifications);
+
+    if (insertError) {
+      console.error('❌ Error creating notifications:', insertError);
+      return false;
+    }
+
+    console.log(`✅ Notifications created for ${teachers.length} teacher(s)`);
+    return true;
+  } catch (error) {
+    console.error('❌ Failed to create notifications:', error);
+    return false;
   }
 }
 

@@ -167,34 +167,49 @@ async function testSadAlert() {
     console.log(`Status: ${response.ok ? '✅ SUCCESS' : '❌ FAILED'}`);
     console.log(`Alert Triggered: ${result.alert ? '✅ YA' : '❌ TIDAK'}`);
     console.log(`Telegram Sent: ${result.telegramSent ? '✅ YA' : '❌ TIDAK'}`);
+    console.log(`Notification Created: ${result.notificationCreated ? '✅ YA' : '❌ TIDAK'}`);
     console.log(`Alert Type: ${result.alertType || 'N/A'}`);
     console.log(`Message: ${result.message}`);
     
-    if (result.alert && result.telegramSent) {
-      console.log('\n🎉 TESTING BERHASIL!');
-      console.log('✅ Alert terdeteksi dan Telegram notification terkirim!');
+    if (result.alert && result.telegramSent && result.notificationCreated) {
+      console.log('\n🎉 TESTING BERHASIL SEMPURNA!');
+      console.log('✅ Alert terdeteksi');
+      console.log('✅ Telegram notification terkirim');
+      console.log('✅ Notifikasi dibuat di database');
       console.log('\n📱 Cek Telegram Anda untuk melihat pesan alert.');
+      console.log('� Cek Lhalaman /notifications untuk melihat notifikasi di UI.');
       console.log('\nPesan yang seharusnya diterima:');
       console.log('─'.repeat(60));
-      console.log('🚨 EMOCLASS ALERT - PERLU PERHATIAN KHUSUS');
+      console.log('� KEMOCLASS ALERT - PERLU PERHATIAN KHUSUS');
       console.log('');
       console.log(`👤 Siswa: ${student.name}`);
       console.log(`📚 Kelas: ${student.classes.name}`);
       console.log('😔 Pola: Emosi sedih/tertekan selama 3 hari berturut-turut');
       console.log('');
       console.log('⚠️ REKOMENDASI TINDAK LANJUT:');
-      console.log('1. 🗣️ Lakukan konseling individual segera');
+      console.log('1. �️ Laakukan konseling individual segera');
       console.log('2. 🏠 Hubungi orang tua/wali untuk koordinasi');
       console.log('3. 👥 Pertimbangkan sesi kelompok dukungan sebaya');
-      console.log('4. 📋 Evaluasi faktor akademik atau sosial');
+      console.log('4. � Eavaluasi faktor akademik atau sosial');
       console.log('5. 💚 Pantau perkembangan emosi harian');
       console.log('');
       console.log('📅 Tindakan: Jadwalkan pertemuan dalam 1-2 hari kerja');
       console.log('⏰ Prioritas: TINGGI');
       console.log('─'.repeat(60));
+    } else if (result.alert && result.telegramSent && !result.notificationCreated) {
+      console.log('\n⚠️ TESTING SEBAGIAN BERHASIL');
+      console.log('✅ Alert terdeteksi');
+      console.log('✅ Telegram notification terkirim');
+      console.log('❌ Notifikasi TIDAK dibuat di database');
+      console.log('\n� Kemungkoinan penyebab:');
+      console.log('   - Tidak ada teacher yang aktif di database');
+      console.log('   - Error saat insert ke tabel notifications');
+      console.log('   - RLS policy menghalangi insert');
+      console.log('\n📖 Cek console log server untuk detail error');
     } else if (result.alert && !result.telegramSent) {
       console.log('\n⚠️ TESTING SEBAGIAN BERHASIL');
       console.log('✅ Alert terdeteksi');
+      console.log(`${result.notificationCreated ? '✅' : '❌'} Notifikasi ${result.notificationCreated ? 'dibuat' : 'TIDAK dibuat'} di database`);
       console.log('❌ Telegram notification TIDAK terkirim');
       console.log('\n💡 Kemungkinan penyebab:');
       console.log('   - TELEGRAM_BOT_TOKEN atau TELEGRAM_CHAT_ID belum diset di .env.local');
