@@ -46,9 +46,23 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#F5F3EF] p-4">
+    <div
+      className="min-h-screen flex items-center justify-center p-4"
+      style={{
+        background:
+          'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+      }}
+    >
       {/* Login card */}
-      <div className="relative bg-white p-8 md:p-12 rounded-3xl shadow-xl w-full max-w-md">
+      <div
+        className="relative bg-white/10 bg-clip-padding backdrop-blur-lg p-8 md:p-12 rounded-3xl shadow-[0_8px_32px_rgba(0,0,0,0.12)] w-full max-w-md border border-white/20 ring-1 ring-white/30"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.06) 100%)',
+          WebkitBackdropFilter: 'blur(12px)',
+          backdropFilter: 'blur(12px)',
+        }}
+      >
         {/* Logo and title */}
         <div className="text-center mb-10">
           <div className="flex justify-center mb-6">
@@ -62,7 +76,9 @@ export default function LoginPage() {
               className="object-contain w-auto h-auto max-w-[300px]"
             />
           </div>
-          <p className="text-gray-400 text-base">Sistem Monitoring Emosi Siswa</p>
+          <p className="text-gray-600 text-base font-bold">
+            Sistem Monitoring Emosi Siswa
+          </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
@@ -151,10 +167,10 @@ export default function LoginPage() {
         </form>
 
         {/* Footer info */}
-        <div className="mt-8 pt-6 border-t border-gray-200">
+        <div className="mt-8 pt-6">
           <div className="text-center space-y-2">
-            <p className="text-sm text-gray-500">
-              🔒 Akun hanya dapat dibuat oleh administrator
+            <p className="text-sm text-gray-600">
+            Akun hanya dapat dibuat oleh administrator
             </p>
             <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
               <span>Default:</span>
