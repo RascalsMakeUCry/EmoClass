@@ -2,6 +2,47 @@
 
 All notable changes to EmoClass project.
 
+## [2.5.0] - 2025-11-29
+
+### 🌡️ IoT Environment Monitoring Integration
+
+#### Added - Environment Alert Card for Teacher Dashboard
+
+**Real-time Environment Monitoring**
+- Environment Alert Card component di Teacher Dashboard
+- Auto-refresh setiap 10 detik tanpa reload
+- Smart classification untuk 5 sensor: suhu, kelembaban, kualitas udara, pencahayaan, kebisingan
+- 3-level alert system: Safe (hijau), Warning (kuning), Danger (merah)
+- Actionable recommendations berdasarkan kondisi terdeteksi
+
+**Files Added:**
+- `components/EnvironmentAlertCard.tsx` - UI component
+- `lib/environment-helper.ts` - Classification logic & thresholds
+- `app/api/environment/current/route.ts` - API endpoint
+- `scripts/test-environment-alert.ts` - Interactive test script
+- `docs/ENVIRONMENT_ALERT_FEATURE.md` - Full documentation
+- `docs/ENVIRONMENT_QUICK_START.md` - Quick setup guide
+
+**Integration:**
+- Seamless integration dengan existing IoT infrastructure
+- Menggunakan tabel `iot_devices` dan `iot_sensor_data`
+- Card hanya muncul jika kelas punya IoT device
+- Graceful handling untuk kelas tanpa sensor
+
+**Benefits:**
+- Guru bisa monitor kondisi ruangan tanpa buka menu IoT terpisah
+- Proactive alerts sebelum siswa komplain
+- Data-driven decisions untuk kenyamanan belajar
+- Cegah masalah kesehatan akibat lingkungan buruk
+
+#### Updated
+- `app/dashboard/page.tsx` - Added EnvironmentAlertCard
+- `lib/types.ts` - Added IoT sensor types
+- `README.md` - Added IoT monitoring documentation
+- `package.json` - Added `test:environment` script
+
+---
+
 ## [2.4.0] - 2025-11-29
 
 ### 🔔 Complete Notification System Implementation

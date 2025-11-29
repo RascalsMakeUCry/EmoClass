@@ -50,6 +50,28 @@ export interface EnvironmentalData {
   noiseLevel: number[]; // Hourly data
 }
 
+// IoT Sensor Types
+export interface IoTDevice {
+  id: string;
+  device_id: string;
+  class_id: number;
+  created_at: string;
+}
+
+export interface IoTSensorData {
+  id: number;
+  device_id: string;
+  temperature: number;
+  humidity: number;
+  gas_analog: number;
+  gas_digital: number;
+  light_analog: number;
+  light_digital: number;
+  sound_analog: number;
+  sound_digital: number;
+  created_at: string;
+}
+
 // Dashboard UI Upgrade Types
 
 export interface DashboardStats {

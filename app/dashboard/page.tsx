@@ -8,6 +8,7 @@ import { calculateDashboardStats } from '@/lib/dashboard-stats';
 import EmotionPieChart from '@/components/EmotionPieChart';
 import StatsCard from '@/components/StatsCard';
 import DashboardHeader from '@/components/DashboardHeader';
+import EnvironmentAlertCard from '@/components/EnvironmentAlertCard';
 import { StatsCardSkeleton, PieChartSkeleton, ProgressCircleSkeleton, AttentionListSkeleton } from '@/components/SkeletonLoader';
 
 export default function DashboardPage() {
@@ -279,6 +280,13 @@ export default function DashboardPage() {
             </div>
           )}
         </div>
+
+        {/* Environment Alert Card */}
+        {selectedClassId && (
+          <div className="mb-8 relative z-0">
+            <EnvironmentAlertCard classId={selectedClassId} />
+          </div>
+        )}
 
         {/* Stats Cards */}
         {selectedClassId && (

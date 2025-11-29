@@ -32,6 +32,7 @@
 - **Staggered animations** - Cards muncul dengan delay
 - **Reset button** untuk memulai hari baru
 - **Glass morphism design** - Modern backdrop blur effects
+- **🌡️ Environment Alert Card (NEW!)** - Monitor kondisi ruang kelas real-time dengan IoT sensors
 
 ### 4. 🚨 Enhanced Multi-Pattern Alert System (NEW!)
 - **Smart detection** - 3 consecutive days of specific emotional patterns
@@ -43,6 +44,15 @@
 - **Instant notification** - Telegram alerts to BK teacher
 - **Early intervention** - Prevent issues before they escalate
 - **Automated workflow** - Zero manual monitoring required
+
+### 5. 🌡️ IoT Environment Monitoring (NEW!)
+- **Real-time sensor data** - Suhu, kelembaban, kualitas udara, pencahayaan, kebisingan
+- **Smart classification** - Otomatis deteksi kondisi tidak ideal (Safe/Warning/Danger)
+- **Environment Alert Card** - Tampil langsung di Teacher Dashboard
+- **Actionable recommendations** - Saran spesifik untuk perbaikan kondisi ruangan
+- **Auto-refresh** - Update setiap 10 detik tanpa reload
+- **Health & comfort focus** - Cegah masalah kesehatan akibat lingkungan buruk
+- **ESP32 integration** - Data dari sensor IoT masuk real-time ke database
 
 ## 🚀 Tech Stack
 
@@ -184,6 +194,10 @@ Semua dokumentasi ada di folder `docs/`:
 - [`docs/JUDGES_GUIDE.md`](docs/JUDGES_GUIDE.md) - Panduan untuk juri
 - [`docs/PRE_DEMO_CHECKLIST.md`](docs/PRE_DEMO_CHECKLIST.md) - Checklist sebelum demo
 - [`docs/FINAL_SUMMARY.md`](docs/FINAL_SUMMARY.md) - Summary lengkap project
+
+### 🌡️ IoT Environment Monitoring
+- [`docs/ENVIRONMENT_ALERT_FEATURE.md`](docs/ENVIRONMENT_ALERT_FEATURE.md) - **NEW!** Dokumentasi lengkap Environment Alert Card
+- [`scripts/test-environment-alert.ts`](scripts/test-environment-alert.ts) - **NEW!** Script testing untuk berbagai kondisi lingkungan
 
 ### 🔧 Troubleshooting
 - [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) - Solusi masalah umum

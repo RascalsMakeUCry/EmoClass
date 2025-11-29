@@ -10,7 +10,9 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:sad-alert": "tsx scripts/test-sad-alert.ts",
-    "test:alert": "tsx scripts/test-alert-interactive.ts"
+    "test:alert": "tsx scripts/test-alert-interactive.ts",
+    "test:environment": "tsx scripts/test-environment-alert.ts",
+    "setup:iot": "tsx scripts/setup-iot-device.ts"
   },
   "dependencies": {
     "@radix-ui/react-select": "^2.2.6",
