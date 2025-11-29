@@ -288,7 +288,7 @@ export default function NotificationsPage() {
             {unreadCount > 0 && (
               <button
                 onClick={markAllAsRead}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl font-medium text-sm sm:text-base whitespace-nowrap"
+                className="flex items-center justify-center gap-2 px-4 py-2.5 sm:px-5 bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-xl hover:from-orange-600 hover:to-orange-700 transition-all shadow-lg hover:shadow-xl font-medium text-sm sm:text-base whitespace-nowrap cursor-pointer"
               >
                 <CheckCheck className="w-4 h-4" />
                 <span>Tandai Semua Dibaca</span>
