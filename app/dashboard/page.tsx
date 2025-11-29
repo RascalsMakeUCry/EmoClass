@@ -211,7 +211,14 @@ export default function DashboardPage() {
     try {
       const response = await fetch('/api/demo/trigger-sad-alert', {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const result = await response.json();
       setDemoResult(result);
@@ -221,10 +228,11 @@ export default function DashboardPage() {
           setDemoResult(null);
         }, 10000);
       }
-    } catch (error) {
+    } catch (error: any) {
+      console.error('Demo alert error:', error);
       setDemoResult({
         success: false,
-        error: 'Gagal menjalankan demo. Pastikan server berjalan.',
+        error: error.message || 'Gagal menjalankan demo. Pastikan server berjalan.',
       });
     } finally {
       setIsDemoLoading(false);

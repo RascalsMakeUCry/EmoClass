@@ -6,9 +6,9 @@ Fitur demo untuk mensimulasikan alert Telegram ketika siswa menunjukkan emosi se
 ## Cara Menggunakan
 
 ### Melalui UI (Recommended untuk Demo)
-1. Login sebagai **Admin**
-2. Buka halaman **Admin Dashboard** (`/admin`)
-3. Di bagian atas, Anda akan melihat section **"Demo Telegram Alert"** dengan background biru
+1. Login sebagai **Guru** (bukan admin)
+2. Buka halaman **Dashboard Guru** (`/dashboard`)
+3. Scroll ke bawah, setelah Environment Alert Card, Anda akan melihat section **"Demo Telegram Alert"** dengan background biru
 4. Klik tombol **"🚨 Jalankan Demo Alert"**
 5. Tunggu beberapa detik hingga proses selesai
 6. Hasil akan ditampilkan di bawah tombol:
@@ -104,8 +104,16 @@ Response:
 
 ## Related Files
 
-- **UI Component**: `app/admin/page.tsx`
+- **UI Component**: `app/dashboard/page.tsx` (Demo section di Dashboard Guru)
 - **API Endpoint**: `app/api/demo/trigger-sad-alert/route.ts`
 - **Alert Logic**: `app/api/check-alert/route.ts`
 - **Test Script**: `scripts/test-sad-alert.ts`
 - **Notification Helper**: `lib/notification-helper.ts`
+
+## Kenapa di Dashboard Guru?
+
+Tombol demo ditempatkan di Dashboard Guru (bukan Admin) karena:
+1. **Konteks yang Tepat**: Guru yang akan menerima dan melihat alert Telegram
+2. **Flow yang Natural**: Guru bisa langsung melihat hasil demo di dashboard mereka
+3. **Akses Mudah**: Tidak perlu switch ke halaman admin untuk demo
+4. **User Experience**: Lebih intuitif untuk demo ke stakeholder (guru/kepala sekolah)
