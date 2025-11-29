@@ -179,10 +179,6 @@ export default function LoginPage() {
             <p className="text-sm text-gray-600">
             Akun hanya dapat dibuat oleh administrator
             </p>
-            <div className="flex items-center justify-center gap-2 text-sm text-gray-400">
-              <span>Default:</span>
-              <span className="text-gray-600">admin@emoclass.com</span>
-            </div>
           </div>
         </div>
       </div>
