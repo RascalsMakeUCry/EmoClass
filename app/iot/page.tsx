@@ -96,6 +96,12 @@ export default function IoTPage() {
   const [rows, setRows] = useState<any[]>([]);
   const [sensorFilter, setSensorFilter] = useState<SensorFilter>("all");
   const [debugInfo, setDebugInfo] = useState<string>("");
+  const [mounted, setMounted] = useState(false);
+
+  // Fix hydration - mount after client side render
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Fetch initial data
   const fetchData = async () => {
@@ -122,10 +128,15 @@ export default function IoTPage() {
       console.log("🔢 First row:", data[0]);
       console.log("🌡️ Temperature:", data[0].temperature);
       console.log("💧 Humidity:", data[0].humidity);
-      console.log("🕒 Created at (WIB):", formatWIBDateTime(data[0].created_at));
+      console.log(
+        "🕒 Created at (WIB):",
+        formatWIBDateTime(data[0].created_at)
+      );
       setRows(data);
       setDebugInfo(
-        `Loaded ${data.length} rows. Latest temp: ${data[0].temperature}°C at ${formatWIBTime(data[0].created_at)} WIB`
+        `Loaded ${data.length} rows. Latest temp: ${
+          data[0].temperature
+        }°C at ${formatWIBTime(data[0].created_at)} WIB`
       );
     } else {
       console.warn("⚠️ No data found in database");
@@ -174,41 +185,57 @@ export default function IoTPage() {
     );
   }, [rows, sensorFilter]);
 
-  const graphData = filtered
-    .slice()
-    .reverse()
-    .map((row) => {
-      // Format waktu ke WIB untuk graph
-      const timestamp = row.created_at
-        ? formatWIBTime(row.created_at)
-        : new Date().toLocaleTimeString("id-ID", { 
-            timeZone: "Asia/Jakarta",
-            hour: "2-digit",
-            minute: "2-digit",
-            second: "2-digit",
-          });
+  const graphData = useMemo(() => {
+    return filtered
+      .slice()
+      .reverse()
+      .map((row) => {
+        // Format waktu ke WIB untuk graph
+        const timestamp = row.created_at
+          ? formatWIBTime(row.created_at)
+          : new Date().toLocaleTimeString("id-ID", {
+              timeZone: "Asia/Jakarta",
+              hour: "2-digit",
+              minute: "2-digit",
+              second: "2-digit",
+            });
 
-      return {
-        time: timestamp,
-        temperature: row.temperature || 0,
-        humidity: row.humidity || 0,
-        gas: row.gas_analog || 0,
-        light: row.light_analog || 0,
-        sound: row.sound_analog || 0,
-      };
-    });
+        return {
+          time: timestamp,
+          temperature: row.temperature || 0,
+          humidity: row.humidity || 0,
+          gas: row.gas_analog || 0,
+          light: row.light_analog || 0,
+          sound: row.sound_analog || 0,
+        };
+      });
+  }, [filtered]);
+
+  // Prevent hydration mismatch
+  if (!mounted) {
+    return (
+      <div className="p-6">
+        <div className="animate-pulse">Loading dashboard...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold mb-4">📡 IoT Monitoring Dashboard</h1>
+      <h1 className="text-3xl font-bold mb-4">
+        📡 IoT Monitoring Dashboard (WIB)
+      </h1>
 
       {/* Debug Info */}
       <Card className="p-4 bg-blue-50 border-blue-200">
-        <p className="font-semibold text-blue-900">🐛 Debug Info (WIB - UTC+7):</p>
+        <p className="font-semibold text-blue-900">
+          🐛 Debug Info (WIB - UTC+7):
+        </p>
         <p className="text-sm text-blue-700">{debugInfo}</p>
         <p className="text-xs text-blue-600 mt-2">
           Total rows in state: {rows.length} | Filtered rows: {filtered.length}{" "}
-          | Check browser console (F12) for detailed logs
+          | Current WIB Time:{" "}
+          {new Date().toLocaleTimeString("id-ID", { timeZone: "Asia/Jakarta" })}
         </p>
       </Card>
 
@@ -276,35 +303,96 @@ export default function IoTPage() {
         </Card>
       </div>
 
-      {/* Charts */}
+      {/* Charts - COMPLETELY FIXED */}
       <Card className="p-4">
         <CardTitle>📊 Sensor Charts (WIB)</CardTitle>
-        <div className="h-80 mt-4">
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={graphData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="time" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              {(sensorFilter === "all" || sensorFilter === "temperature") && (
-                <Line type="monotone" dataKey="temperature" stroke="#ff0000" />
-              )}
-              {(sensorFilter === "all" || sensorFilter === "humidity") && (
-                <Line type="monotone" dataKey="humidity" stroke="#0000ff" />
-              )}
-              {(sensorFilter === "all" || sensorFilter === "gas_analog") && (
-                <Line type="monotone" dataKey="gas" stroke="#ff6600" />
-              )}
-              {(sensorFilter === "all" || sensorFilter === "light_analog") && (
-                <Line type="monotone" dataKey="light" stroke="#ffaa00" />
-              )}
-              {(sensorFilter === "all" || sensorFilter === "sound_analog") && (
-                <Line type="monotone" dataKey="sound" stroke="#00aa00" />
-              )}
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+        {graphData.length === 0 ? (
+          <div
+            className="mt-4 flex items-center justify-center text-gray-500"
+            style={{ height: "320px" }}
+          >
+            No data available for chart
+          </div>
+        ) : (
+          <div className="mt-4 w-full" style={{ height: "320px" }}>
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={graphData}
+                margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis
+                  dataKey="time"
+                  angle={-45}
+                  textAnchor="end"
+                  height={80}
+                  tick={{ fontSize: 10 }}
+                />
+                <YAxis />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: "white",
+                    border: "1px solid #ccc",
+                  }}
+                  labelStyle={{ fontWeight: "bold" }}
+                />
+                <Legend />
+                {(sensorFilter === "all" || sensorFilter === "temperature") && (
+                  <Line
+                    type="monotone"
+                    dataKey="temperature"
+                    stroke="#ff0000"
+                    name="Temperature (°C)"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                )}
+                {(sensorFilter === "all" || sensorFilter === "humidity") && (
+                  <Line
+                    type="monotone"
+                    dataKey="humidity"
+                    stroke="#0000ff"
+                    name="Humidity (%)"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                )}
+                {(sensorFilter === "all" || sensorFilter === "gas_analog") && (
+                  <Line
+                    type="monotone"
+                    dataKey="gas"
+                    stroke="#ff6600"
+                    name="Gas Level"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                )}
+                {(sensorFilter === "all" ||
+                  sensorFilter === "light_analog") && (
+                  <Line
+                    type="monotone"
+                    dataKey="light"
+                    stroke="#ffaa00"
+                    name="Light Level"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                )}
+                {(sensorFilter === "all" ||
+                  sensorFilter === "sound_analog") && (
+                  <Line
+                    type="monotone"
+                    dataKey="sound"
+                    stroke="#00aa00"
+                    name="Sound Level"
+                    strokeWidth={2}
+                    dot={{ r: 3 }}
+                  />
+                )}
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        )}
       </Card>
 
       {/* Raw Data Table (for debugging) */}
