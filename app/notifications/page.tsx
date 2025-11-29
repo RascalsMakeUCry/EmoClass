@@ -56,17 +56,13 @@ export default function NotificationsPage() {
       .on(
         "postgres_changes",
         {
-          event: "*", // Listen to all events (INSERT, UPDATE, DELETE)
+          event: "*",
           schema: "public",
           table: "notifications",
         },
         (payload) => {
-          console.log("✅ Realtime notification change:", payload);
-
-          // Refresh notifications when any change occurs
           fetchNotifications();
 
-          // Show toast for new notifications
           if (payload.eventType === "INSERT") {
             const newNotif = payload.new as Notification;
             setToast({
@@ -77,13 +73,10 @@ export default function NotificationsPage() {
         }
       )
       .subscribe((status) => {
-        console.log("Realtime subscription status:", status);
         if (status === "SUBSCRIBED") {
           setRealtimeStatus("connected");
-          console.log("✅ Realtime notifications connected!");
         } else if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") {
           setRealtimeStatus("disconnected");
-          console.error("❌ Realtime connection failed:", status);
         }
       });
 

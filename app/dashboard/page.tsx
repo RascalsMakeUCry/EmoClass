@@ -146,14 +146,6 @@ export default function DashboardPage() {
 
       if (checkinsError) throw checkinsError;
 
-      console.log('Dashboard Debug:', {
-        startOfDay: startOfDay.toISOString(),
-        endOfDay: endOfDay.toISOString(),
-        totalStudents: studentIds.length,
-        checkinsFound: checkins?.length || 0,
-        checkins: checkins
-      });
-
       // Count unique students who checked in
       const uniqueStudents = new Set(checkins?.map(c => c.student_id) || []);
       setCheckedInCount(uniqueStudents.size);
@@ -229,7 +221,6 @@ export default function DashboardPage() {
         }, 10000);
       }
     } catch (error: any) {
-      console.error('Demo alert error:', error);
       setDemoResult({
         success: false,
         error: error.message || 'Gagal menjalankan demo. Pastikan server berjalan.',

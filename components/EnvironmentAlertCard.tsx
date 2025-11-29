@@ -16,20 +16,14 @@ export default function EnvironmentAlertCard({ classId }: EnvironmentAlertCardPr
   const [realtimeStatus, setRealtimeStatus] = useState<'connecting' | 'connected' | 'disconnected'>('disconnected');
 
   useEffect(() => {
-    console.log('🔄 EnvironmentAlertCard mounted/updated. classId:', classId);
-    
     if (!classId) {
-      console.log('⚠️ No classId provided, skipping fetch');
       setLoading(false);
       return;
     }
 
-    // Initial fetch
     fetchEnvironmentData();
 
-    // Setup Supabase Realtime subscription
     setRealtimeStatus('connecting');
-    console.log('📡 Setting up Realtime subscription for iot_sensor_data...');
 
     const supabase = createClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -45,34 +39,25 @@ export default function EnvironmentAlertCard({ classId }: EnvironmentAlertCardPr
           schema: 'public',
           table: 'iot_sensor_data',
         },
-        (payload) => {
-          console.log('🔔 Realtime update received:', payload.new);
-          // Update data instantly if it's for our class
-          // We'll fetch to ensure it's the right device
+        () => {
           fetchEnvironmentData();
         }
       )
       .subscribe((status) => {
-        console.log('📡 Realtime status:', status);
         if (status === 'SUBSCRIBED') {
           setRealtimeStatus('connected');
-          console.log('✅ Realtime connected!');
         } else if (status === 'CLOSED' || status === 'CHANNEL_ERROR') {
           setRealtimeStatus('disconnected');
-          console.log('❌ Realtime disconnected');
         }
       });
 
-    // Fallback: Polling every 30 seconds (in case Realtime fails)
     const interval = setInterval(() => {
       if (realtimeStatus !== 'connected') {
-        console.log('🔄 Fallback polling (Realtime not connected)');
         fetchEnvironmentData();
       }
     }, 30000);
 
     return () => {
-      console.log('🧹 EnvironmentAlertCard cleanup');
       setRealtimeStatus('disconnected');
       supabase.removeChannel(channel);
       clearInterval(interval);
@@ -81,13 +66,10 @@ export default function EnvironmentAlertCard({ classId }: EnvironmentAlertCardPr
 
   async function fetchEnvironmentData() {
     try {
-      console.log('🌡️ Fetching environment data for classId:', classId);
       const response = await fetch(`/api/environment/current?classId=${classId}`);
       const result = await response.json();
-      console.log('📊 API Response:', result);
 
       if (!response.ok) {
-        console.log('❌ API Error:', result);
         if (result.hasDevice === false) {
           setHasDevice(false);
           setError('Kelas ini belum memiliki sensor IoT');
@@ -101,13 +83,11 @@ export default function EnvironmentAlertCard({ classId }: EnvironmentAlertCardPr
         return;
       }
 
-      console.log('✅ Environment data loaded successfully');
       setEnvironmentData(result.data);
       setHasDevice(true);
       setError('');
       setLoading(false);
     } catch (err) {
-      console.error('❌ Error fetching environment data:', err);
       setError('Gagal memuat data lingkungan');
       setLoading(false);
     }

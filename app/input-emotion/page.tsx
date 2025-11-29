@@ -125,7 +125,7 @@ export default function CheckInPage() {
         setTodayCheckin(null);
       }
     } catch (err) {
-      console.error("Error checking today checkin:", err);
+      // Silent fail
     }
   }
 

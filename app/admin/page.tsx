@@ -79,7 +79,6 @@ export default function AdminPage() {
       await fetch('/api/logout', { method: 'POST' });
       router.push('/login');
     } catch (error) {
-      console.error('Logout error:', error);
       setIsLoggingOut(false);
       alert('Terjadi kesalahan saat logout. Silakan coba lagi.');
     }

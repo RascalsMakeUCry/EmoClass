@@ -19,7 +19,6 @@ async function createNotificationForTeachers(
       .eq('is_active', true);
 
     if (teachersError || !teachers || teachers.length === 0) {
-      console.error('Error fetching teachers:', teachersError);
       return false;
     }
 
@@ -43,13 +42,11 @@ async function createNotificationForTeachers(
       .insert(notifications);
 
     if (insertError) {
-      console.error('Error creating notifications:', insertError);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Failed to create notifications:', error);
     return false;
   }
 }
@@ -62,7 +59,6 @@ async function sendTelegramAlert(
   const chatId = process.env.TELEGRAM_CHAT_ID;
 
   if (!botToken || !chatId) {
-    console.error('Telegram credentials not configured');
     return false;
   }
 
@@ -96,24 +92,17 @@ async function sendTelegramAlert(
     });
 
     if (!response.ok) {
-      const error = await response.text();
-      console.error('Telegram API error:', error);
       return false;
     }
 
     return true;
   } catch (error) {
-    console.error('Failed to send Telegram alert:', error);
     return false;
   }
 }
 
-export async function POST(request: NextRequest) {
+export async function POST() {
   try {
-    console.log('🚀 Starting demo alert...');
-    
-    // Step 1: Pilih siswa pertama untuk demo
-    console.log('📋 Step 1: Fetching student...');
     const { data: students, error: studentsError } = await supabase
       .from('students')
       .select('id, name, class_id')
@@ -121,7 +110,6 @@ export async function POST(request: NextRequest) {
       .single();
 
     if (studentsError) {
-      console.error('❌ Error fetching student:', studentsError);
       return NextResponse.json(
         { success: false, error: `Database error: ${studentsError.message}` },
         { status: 500 }
@@ -129,7 +117,6 @@ export async function POST(request: NextRequest) {
     }
 
     if (!students) {
-      console.error('❌ No students found in database');
       return NextResponse.json(
         { success: false, error: 'Tidak ada siswa di database. Tambahkan siswa terlebih dahulu.' },
         { status: 404 }
@@ -138,7 +125,6 @@ export async function POST(request: NextRequest) {
 
     const student = students as any;
     
-    // Get class name separately
     let className = 'Unknown';
     if (student.class_id) {
       const { data: classData } = await supabase
@@ -151,24 +137,12 @@ export async function POST(request: NextRequest) {
         className = classData.name;
       }
     }
-    
-    console.log(`✅ Student found: ${student.name} (${className})`);
 
-    // Step 2: Hapus check-in lama untuk siswa ini
-    console.log('🧹 Step 2: Cleaning old check-ins...');
-    const { error: deleteError } = await supabase
+    await supabase
       .from('emotion_checkins')
       .delete()
       .eq('student_id', student.id);
 
-    if (deleteError) {
-      console.error('⚠️ Warning: Could not delete old check-ins:', deleteError);
-    } else {
-      console.log('✅ Old check-ins cleaned');
-    }
-
-    // Step 3: Insert 3 check-in dengan emosi "stressed"
-    console.log('📝 Step 3: Creating 3 check-ins...');
     const now = new Date();
     const checkins = [];
 
@@ -187,33 +161,20 @@ export async function POST(request: NextRequest) {
         .select()
         .single();
 
-      if (error) {
-        console.error(`❌ Error creating check-in ${3 - i}:`, error);
-      } else if (data) {
+      if (!error && data) {
         checkins.push(data);
-        console.log(`✅ Check-in ${3 - i}/3 created`);
       }
     }
 
     if (checkins.length !== 3) {
-      console.error(`❌ Only ${checkins.length}/3 check-ins created`);
       return NextResponse.json(
         { success: false, error: `Gagal membuat 3 check-in (hanya ${checkins.length} berhasil)` },
         { status: 500 }
       );
     }
 
-    console.log('✅ All 3 check-ins created successfully');
-
-    // Step 4: Send alerts
-    console.log('🚨 Step 4: Sending alerts...');
     const telegramSent = await sendTelegramAlert(student.name, className);
-    console.log(`${telegramSent ? '✅' : '❌'} Telegram alert: ${telegramSent ? 'sent' : 'failed'}`);
-    
     const notificationCreated = await createNotificationForTeachers(student.name, className);
-    console.log(`${notificationCreated ? '✅' : '❌'} Notification: ${notificationCreated ? 'created' : 'failed'}`);
-
-    console.log('🎉 Demo alert completed!');
 
     return NextResponse.json({
       success: true,
@@ -232,8 +193,6 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('❌ Demo alert error:', error);
-    console.error('Stack trace:', error.stack);
     return NextResponse.json(
       { success: false, error: error.message || 'Internal server error' },
       { status: 500 }
