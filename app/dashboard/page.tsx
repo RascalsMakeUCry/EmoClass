@@ -230,7 +230,7 @@ export default function DashboardPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
             <div className="flex flex-col sm:flex-row sm:items-center gap-4">
               {/* Realtime Status Indicator - Enhanced */}
-              <div className="flex items-center gap-3 px-4 py-2.5 bg-white/60 rounded-xl shadow-md border border-white/40">
+              <div className="flex items-center gap-3 px-4 py-2.5 bg-white/100 rounded-xl border border-white/0">
                 <div className={`w-3 h-3 rounded-full shadow-lg ${
                   realtimeStatus === 'connected' ? 'bg-green-500 animate-pulse' :
                   realtimeStatus === 'connecting' ? 'bg-yellow-500 animate-pulse' :
@@ -244,7 +244,7 @@ export default function DashboardPage() {
               </div>
               
               {/* Last Updated - Enhanced */}
-              <div className="flex items-center gap-2 px-4 py-2.5 bg-white/40 rounded-xl">
+              <div className="flex items-center gap-2 px-4 py-2.5 bg-white/100 rounded-xl">
                 <span className="text-sm text-gray-500">Update Terakhir :</span>
                 <span className="text-sm font-medium text-gray-600">
                   {new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' })}
@@ -254,7 +254,6 @@ export default function DashboardPage() {
 
             {/* Class Selector - Enhanced */}
             <div className="flex items-center gap-3">
-              <label className="text-sm font-bold text-gray-700 hidden sm:block">📚 Pilih Kelas:</label>
               <select
                 value={selectedClassId}
                 onChange={(e) => setSelectedClassId(e.target.value)}

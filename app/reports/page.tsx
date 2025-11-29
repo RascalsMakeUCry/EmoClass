@@ -163,8 +163,8 @@ export default function ReportsPage() {
           <div className="flex flex-col gap-6">
             {/* Header with Icon */}
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-gradient-to-br from-blue-400 via-blue-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-3xl">📈</span>
+              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg">
+                <span className="text-3xl"></span>
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Laporan Historis</h2>
@@ -176,7 +176,7 @@ export default function ReportsPage() {
               {/* Class Selector */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                  <span>📚</span>
+                  <span></span>
                   <span>Kelas</span>
                 </label>
                 <select
@@ -196,7 +196,7 @@ export default function ReportsPage() {
               {/* Start Date */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                  <span>📅</span>
+                  <span></span>
                   <span>Dari Tanggal</span>
                 </label>
                 <input
@@ -211,7 +211,7 @@ export default function ReportsPage() {
               {/* End Date */}
               <div>
                 <label className="block text-sm font-bold text-gray-700 mb-2 flex items-center gap-2">
-                  <span>📅</span>
+                  <span></span>
                   <span>Sampai Tanggal</span>
                 </label>
                 <input

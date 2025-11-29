@@ -333,7 +333,7 @@ export default function NotificationsPage() {
             </button>
             <button
               onClick={() => setFilter("summary")}
-              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg flex items-center gap-2 ${
+              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:cursor-pointer flex items-center gap-2 ${
                 filter === "summary"
                   ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200"

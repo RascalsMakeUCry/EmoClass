@@ -135,36 +135,31 @@ export default function DashboardHeader({ user }: DashboardHeaderProps) {
           {/* Left: Enhanced Title + Date + Welcome */}
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-3 mb-2">
-              <div className="w-12 h-12 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-2xl">📊</span>
-              </div>
+              {/* decorative element removed */}
               <div>
-                <h1 className="text-2xl lg:text-3xl font-bold text-gray-900 tracking-tight">
+                <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 tracking-tight">
                   Dashboard Guru
                 </h1>
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-sm text-gray-600 font-medium">
+                  <span className="text-sm text-gray-500 font-medium">
                     {formatIndonesianDate(new Date())}
                   </span>
                 </div>
               </div>
             </div>
-            <p className="text-sm text-gray-600 ml-15 hidden sm:block">
-              Selamat datang kembali, <span className="font-semibold text-orange-600">{displayUser.name}</span> 👋
-            </p>
           </div>
 
           {/* Right: Enhanced User Info - Hidden on mobile, shown on desktop */}
           <div className="relative flex-shrink-0 hidden lg:flex">
             <button
               onClick={() => setShowDropdown(!showDropdown)}
-              className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/60 transition-all duration-200 border-2 border-transparent hover:border-orange-200 shadow-md hover:shadow-lg"
+              className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-white/0 transition-all duration-200 border-2 border-transparent hover:border-orange-200 hover:shadow-lg"
             >
               <div className="text-right hidden sm:block">
                 <p className="text-sm font-bold text-gray-900">{displayUser.name}</p>
                 <p className="text-xs text-gray-500 font-medium">Guru</p>
               </div>
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 via-purple-500 to-pink-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg ring-2 ring-white">
+              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-2xl shadow-lg ring-2 ring-white">
                 {displayUser.avatar}
               </div>
             </button>
