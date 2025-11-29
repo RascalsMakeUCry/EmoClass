@@ -188,7 +188,8 @@ export default function NotificationsPage() {
     <div 
       className="min-h-screen p-4 lg:p-8"
       style={{ 
-        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)'
+        background: 'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+        backgroundAttachment: 'fixed',
       }}
     >
       {toast && (
@@ -201,7 +202,7 @@ export default function NotificationsPage() {
 
       <div className="max-w-4xl mx-auto">
         {/* Header */}
-        <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 sm:p-6 mb-6 hover:shadow-2xl transition-shadow">
+        <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-4 sm:p-6 mb-6 hover:shadow-2xl transition-shadow">
           {/* Mobile: Stack vertically, Desktop: Side by side */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div className="flex items-center gap-3 sm:gap-4">
@@ -311,12 +312,12 @@ export default function NotificationsPage() {
         {/* Notifications List */}
         <div className="space-y-6">
           {loading ? (
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+            <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
               <LoadingSpinner size="lg" color="blue" />
               <p className="text-gray-600 mt-4">Memuat notifikasi...</p>
             </div>
           ) : notifications.length === 0 ? (
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
+            <div className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-xl border border-white/20 p-12 text-center">
               <Bell className="w-16 h-16 text-gray-400 mx-auto mb-4" />
               <h3 className="text-xl font-semibold text-gray-800 mb-2">
                 Tidak Ada Notifikasi
@@ -350,7 +351,7 @@ export default function NotificationsPage() {
                     .map((notif) => (
                       <div
                         key={notif.id}
-                        className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border-2 border-orange-300 bg-gradient-to-r from-orange-50/50 to-white/80 p-6 transition-all hover:shadow-2xl hover:scale-[1.01]"
+                        className="bg-white/40 backdrop-blur-sm rounded-2xl shadow-lg border-0 border-orange-0 bg-gradient-to-r from-orange-50/50 to-white/40 p-6 transition-all hover:shadow-2xl hover:scale-[1.01]"
                       >
                         <div className="flex items-start gap-4">
                           <div className="flex-shrink-0">
