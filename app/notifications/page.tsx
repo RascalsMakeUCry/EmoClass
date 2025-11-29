@@ -310,7 +310,7 @@ export default function NotificationsPage() {
             </button>
             <button
               onClick={() => setFilter("alert")}
-              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:cursor-pointer flex items-center gap-2 ${
+              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md cursor-pointer hover:shadow-lg flex items-center gap-2 ${
                 filter === "alert"
                   ? "bg-gradient-to-r from-red-500 to-red-600 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200"
@@ -333,7 +333,7 @@ export default function NotificationsPage() {
             </button>
             <button
               onClick={() => setFilter("summary")}
-              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:cursor-pointer flex items-center gap-2 ${
+              className={`px-5 py-2.5 rounded-xl font-semibold transition-all shadow-md cursor-pointer hover:shadow-lg flex items-center gap-2 ${
                 filter === "summary"
                   ? "bg-gradient-to-r from-green-500 to-green-600 text-white"
                   : "bg-white text-gray-700 hover:bg-gray-50 border-2 border-gray-200"
@@ -406,14 +406,14 @@ export default function NotificationsPage() {
                               <div className="flex items-center gap-2 flex-shrink-0">
                                 <button
                                   onClick={() => markAsRead(notif.id)}
-                                  className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors shadow-sm hover:cursor-pointer"
+                                  className="p-2 text-orange-600 hover:bg-orange-50 rounded-lg transition-colors shadow-sm cursor-pointer"
                                   title="Tandai sudah dibaca"
                                 >
                                   <Check className="w-4 h-4" />
                                 </button>
                                 <button
                                   onClick={() => deleteNotification(notif.id)}
-                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors shadow-sm hover:cursor-pointer"
+                                  className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors shadow-sm cursor-pointer"
                                   title="Hapus notifikasi"
                                 >
                                   <Trash2 className="w-4 h-4" />
