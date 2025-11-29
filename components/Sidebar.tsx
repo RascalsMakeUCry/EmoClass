@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
-import { LayoutGrid, Heart, FileText, Bell, LogOut, X } from "lucide-react";
+import { LayoutGrid, Heart, FileText, Bell, LogOut, X, ActivityIcon } from "lucide-react";
 
 interface NavItem {
   id: string;
@@ -47,9 +47,9 @@ const navigationItems: NavItem[] = [
   },
   {
     id: "iot-monitoring",
-    label: "Monitoring IoT",
+    label: "Monitoring",
     href: "/iot",
-    icon: <LayoutGrid className="w-5 h-5" />,
+    icon: <ActivityIcon className="w-5 h-5" />,
   },
 ];
 

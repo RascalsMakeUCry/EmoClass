@@ -163,9 +163,6 @@ export default function ReportsPage() {
           <div className="flex flex-col gap-6">
             {/* Header with Icon */}
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center shadow-lg">
-                <span className="text-3xl"></span>
-              </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-900">Laporan Historis</h2>
                 <p className="text-sm text-gray-600 mt-1">Analisis data emosi siswa berdasarkan periode waktu</p>

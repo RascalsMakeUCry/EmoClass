@@ -207,16 +207,14 @@ export default function CheckInPage() {
       <div className="max-w-2xl mx-auto">
         {/* Header */}
         <div className="text-center mb-8 pt-8 animate-fadeIn">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">Halloo..</h1>
           <h2 className="text-3xl font-bold text-gray-900 mb-4">
-            Bagaimana Harimu pagi ini ?
+            Halooo... Bagaimana Perasaanmu Hari Ini? 
           </h2>
           <p className="text-gray-500 font-medium">
             {formatIndonesianDate(new Date())}
           </p>
           <p className="text-sm text-gray-500 mt-3 max-w-md mx-auto">
-            Bagaimana perasaan Anda hari ini? Ceritakan kepada kami untuk
-            membantu guru memahami kondisi kelas dengan lebih baik.
+            Yukk Isi presensi dulu.
           </p>
         </div>
 

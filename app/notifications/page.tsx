@@ -235,9 +235,6 @@ export default function NotificationsPage() {
           {/* Mobile: Stack vertically, Desktop: Side by side */}
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
             <div className="flex items-center gap-3 sm:gap-4">
-              <div className="w-12 h-12 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-400 via-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg flex-shrink-0">
-                <Bell className="w-6 h-6 sm:w-8 sm:h-8 text-white" />
-              </div>
               <div className="min-w-0 flex-1">
                 <h1 className="text-2xl sm:text-3xl font-bold text-gray-900">
                   Notifikasi

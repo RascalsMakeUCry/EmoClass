@@ -221,15 +221,22 @@ export default function IoTPage() {
   }
 
   return (
-    <div className="p-6 space-y-6">
+    <div
+      className="p-6 space-y-6"
+      style={{
+        background:
+          'radial-gradient(circle at 70% 70%, #FFC966 0%, #FFE5B4 30%, #FFF8E7 60%)',
+        backgroundAttachment: 'fixed',
+      }}
+    >
       <h1 className="text-3xl font-bold mb-4">
-        📡 IoT Monitoring Dashboard (WIB)
+        IoT Monitoring Dashboard
       </h1>
 
       {/* Debug Info */}
       <Card className="p-4 bg-blue-50 border-blue-200">
         <p className="font-semibold text-blue-900">
-          🐛 Debug Info (WIB - UTC+7):
+          Debug Info (WIB - UTC+7):
         </p>
         <p className="text-sm text-blue-700">{debugInfo}</p>
         <p className="text-xs text-blue-600 mt-2">
@@ -240,13 +247,13 @@ export default function IoTPage() {
       </Card>
 
       {/* Sensor Filter */}
-      <Card className="p-4">
+      <Card className="p-4 bg-white/40 border border-white/0">
         <p className="font-semibold mb-2">Filter Sensor</p>
         <Select
           onValueChange={(v: string) => setSensorFilter(v as SensorFilter)}
           value={sensorFilter}
         >
-          <SelectTrigger className="w-64">
+          <SelectTrigger className="w-64 bg-white/80">
             <SelectValue placeholder="Pilih sensor" />
           </SelectTrigger>
           <SelectContent>
@@ -262,7 +269,7 @@ export default function IoTPage() {
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <Card>
+        <Card className="bg-white/40 border border-white/0">
           <CardHeader>
             <CardTitle>Temperature</CardTitle>
           </CardHeader>
@@ -275,7 +282,7 @@ export default function IoTPage() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white/40 border border-white/0">
           <CardHeader>
             <CardTitle>Humidity</CardTitle>
           </CardHeader>
@@ -288,7 +295,7 @@ export default function IoTPage() {
             </div>
           </CardContent>
         </Card>
-        <Card>
+        <Card className="bg-white/40 border border-white/0">
           <CardHeader>
             <CardTitle>Gas Level</CardTitle>
           </CardHeader>
@@ -304,8 +311,8 @@ export default function IoTPage() {
       </div>
 
       {/* Charts - COMPLETELY FIXED */}
-      <Card className="p-4">
-        <CardTitle>📊 Sensor Charts (WIB)</CardTitle>
+      <Card className="p-4 bg-white/40 border border-white/0">
+        <CardTitle>Sensor Charts (WIB)</CardTitle>
         {graphData.length === 0 ? (
           <div
             className="mt-4 flex items-center justify-center text-gray-500"
@@ -396,8 +403,8 @@ export default function IoTPage() {
       </Card>
 
       {/* Raw Data Table (for debugging) */}
-      <Card className="p-4">
-        <CardTitle className="mb-4">🔍 Raw Data - Last 5 Rows (WIB)</CardTitle>
+      <Card className="p-4 bg-white/40 border border-white/0">
+        <CardTitle className="mb-4">Raw Data - Last 5 Rows (WIB)</CardTitle>
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm">
             <thead>
