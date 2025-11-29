@@ -199,7 +199,7 @@ export default function IoTPage() {
                 <div className="flex items-center gap-3 mb-2">
                   <div>
                     <h1 className="text-2xl lg:text-3xl font-bold text-gray-800 tracking-tight">
-                      🌡️ IoT Monitoring Dashboard
+                      IoT Monitoring Dashboard
                     </h1>
                     <div className="flex items-center gap-2 mt-1">
                       <span className="text-sm text-gray-500 font-medium">
